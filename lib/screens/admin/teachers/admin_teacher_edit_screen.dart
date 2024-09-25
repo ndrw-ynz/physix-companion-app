@@ -3,7 +3,7 @@ import 'package:physix_companion_app/widgets/teachers/teacher_form_widget.dart';
 
 import '../../../commons.dart';
 
-part "../../../controllers/admin/teachers/admin_teacher_edit_controller.dart";
+part "admin_teacher_edit_controller.dart";
 
 class AdminTeacherEditScreen extends StatefulWidget {
   const AdminTeacherEditScreen({super.key});

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:physix_companion_app/widgets/sections/section_details_widget.dart';
 
-part '../../../controllers/admin/sections/admin_sections_view_controller.dart';
+part 'admin_sections_view_controller.dart';
 
 class AdminSectionsViewScreen extends StatefulWidget {
   const AdminSectionsViewScreen({super.key});

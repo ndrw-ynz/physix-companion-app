@@ -1,7 +1,7 @@
-part of '../../../screens/admin/sections/admin_sections_view_screen.dart';
+part of 'admin_teacher_view_screen.dart';
 
-abstract class AdminSectionsViewController
-    extends State<AdminSectionsViewScreen> {
+abstract class AdminTeacherViewController
+    extends State<AdminTeacherViewScreen> {
   String? selectedYear;
   List<String> years = [];
 

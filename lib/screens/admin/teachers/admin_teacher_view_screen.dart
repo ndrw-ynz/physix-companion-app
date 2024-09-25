@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:physix_companion_app/widgets/teachers/teacher_details_widget.dart';
 
-part '../../../controllers/admin/teachers/admin_teacher_view_controller.dart';
+part 'admin_teacher_view_controller.dart';
 
 class AdminTeacherViewScreen extends StatefulWidget {
   const AdminTeacherViewScreen({super.key});

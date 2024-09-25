@@ -3,7 +3,7 @@ import 'package:physix_companion_app/widgets/sections/section_form_widget.dart';
 
 import '../../../commons.dart';
 
-part "../../../controllers/admin/sections/admin_sections_edit_controller.dart";
+part "admin_sections_edit_controller.dart";
 
 class AdminSectionsEditScreen extends StatefulWidget {
   const AdminSectionsEditScreen({super.key});

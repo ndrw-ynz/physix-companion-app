@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
+import 'screens/admin/login/admin_login_screen.dart';
 import 'screens/admin/sections/admin_sections_edit_screen.dart';
 import 'screens/admin/teachers/admin_teacher_edit_screen.dart';
 import 'screens/admin/login/admin_forgot_password_screen.dart';
 import 'screens/admin/home/admin_home_screen.dart';
-import 'screens/admin/login/admin_login_screen.dart';
 import 'screens/admin/sections/admin_sections_view_screen.dart';
 import 'screens/admin/teachers/admin_teacher_add_screen.dart';
 import 'screens/admin/teachers/admin_teacher_view_screen.dart';
@@ -53,7 +55,11 @@ final _router = GoRouter(initialLocation: "/", routes: [
       ]),
 ]);
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
