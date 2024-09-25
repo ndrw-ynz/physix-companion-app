@@ -1,4 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import 'screens/admin/sections/admin_sections_edit_screen.dart';
+import 'screens/admin/teachers/admin_teacher_edit_screen.dart';
+import 'screens/admin/login/admin_forgot_password_screen.dart';
+import 'screens/admin/home/admin_home_screen.dart';
+import 'screens/admin/login/admin_login_screen.dart';
+import 'screens/admin/sections/admin_sections_view_screen.dart';
+import 'screens/admin/teachers/admin_teacher_add_screen.dart';
+import 'screens/admin/teachers/admin_teacher_view_screen.dart';
+import 'screens/admin/sections/admin_sections_add_screen.dart';
+import 'screens/home_screen.dart';
+
+final _router = GoRouter(initialLocation: "/", routes: [
+  GoRoute(
+      path: "/",
+      builder: (context, state) => HomeScreen(title: "PhysIX Companion App")),
+  GoRoute(
+      path: "/admin_login",
+      builder: (context, state) => AdminLoginScreen(),
+      routes: <RouteBase>[
+        GoRoute(
+            path: "forgot_password",
+            builder: (context, state) => AdminForgotPasswordScreen())
+      ]),
+  GoRoute(
+      path: "/admin_home",
+      builder: (context, state) => AdminHomeScreen(),
+      routes: <RouteBase>[
+        GoRoute(
+            path: "teachers",
+            builder: (context, state) => AdminTeacherViewScreen(),
+            routes: <RouteBase>[
+              GoRoute(
+                  path: "add",
+                  builder: (context, state) => AdminTeacherAddScreen()),
+              GoRoute(
+                  path: "edit",
+                  builder: (context, state) => AdminTeacherEditScreen())
+            ]),
+        GoRoute(
+            path: "sections",
+            builder: (context, state) => AdminSectionsViewScreen(),
+            routes: <RouteBase>[
+              GoRoute(
+                  path: "add",
+                  builder: (context, state) => AdminSectionsAddScreen()),
+              GoRoute(
+                  path: "edit",
+                  builder: (context, state) => AdminSectionsEditScreen())
+            ])
+      ]),
+]);
 
 void main() {
   runApp(const MyApp());
@@ -9,52 +62,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return MaterialApp.router(
+      title: 'PhysIX Companion App',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Physix Companion App'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black45,
-        title: Text(widget.title),
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Empty Application',
-            ),
-          ],
-        ),
-      ),
+          brightness: Brightness.light,
+          primaryColor: Colors.white,
+          useMaterial3: true,
+          textTheme:
+              const TextTheme(bodyMedium: TextStyle(color: Colors.black)),
+          buttonTheme: const ButtonThemeData(
+              buttonColor: Colors.white, textTheme: ButtonTextTheme.primary)),
+      routerConfig: _router,
     );
   }
 }
