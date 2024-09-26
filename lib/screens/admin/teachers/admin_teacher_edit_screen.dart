@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:physix_companion_app/widgets/teachers/teacher_form_widget.dart';
 
@@ -15,6 +16,9 @@ class AdminTeacherEditScreen extends StatefulWidget {
 class _AdminTeacherEditScreenState extends State<AdminTeacherEditScreen> {
   @override
   Widget build(BuildContext context) {
-    return const TeacherFormWidget(formMode: FormMode.edit);
+    return TeacherFormWidget(
+      formMode: FormMode.edit,
+      dateRegistered: Timestamp.now(),
+    );
   }
 }
