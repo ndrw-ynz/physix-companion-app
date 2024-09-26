@@ -1,11 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:physix_companion_app/utils.dart';
 
 import '../../commons.dart';
 
 class TeacherFormWidget extends StatefulWidget {
-  const TeacherFormWidget({super.key, required this.formMode});
+  const TeacherFormWidget({
+    super.key,
+    required this.formMode,
+    this.uid,
+    this.firstName,
+    this.lastName,
+    this.email,
+    required this.dateRegistered,
+  });
   final FormMode formMode;
+  final String? uid;
+  final String? firstName;
+  final String? lastName;
+  final String? email;
+  final Timestamp dateRegistered;
 
   @override
   State<TeacherFormWidget> createState() => _TeacherFormWidgetState();
@@ -137,6 +154,17 @@ abstract class TeacherFormController extends State<TeacherFormWidget> {
     super.initState();
     // Set the initial value of the date to today's date
     _dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    if (widget.formMode == FormMode.edit) {
+      // Initialize with existing data if in edit mode
+      _firstNameController.text = widget.firstName ?? '';
+      _lastNameController.text = widget.lastName ?? '';
+      _emailController.text = widget.email ?? '';
+      _dateController.text = formatTimestamp(widget.dateRegistered);
+    } else {
+      // Set default values for add mode
+      _dateController.text = formatTimestamp(Timestamp.now());
+    }
   }
 
   String _getModeTypeDesc() {
@@ -169,16 +197,76 @@ abstract class TeacherFormController extends State<TeacherFormWidget> {
             ),
             TextButton(
               onPressed: () {
+                if (widget.formMode == FormMode.add) {
+                  _addTeacherAccount();
+                } else if (widget.formMode == FormMode.edit) {
+                  _editTeacherAccount();
+                }
                 Navigator.of(context).pop();
-                // add logic here for add/edit
                 _showAddSuccessDialog(context);
               },
-              child: const Text('Add'),
+              child: Text(_getModeTypeDesc()),
             ),
           ],
         );
       },
     );
+  }
+
+  Future<void> _addTeacherAccount() async {
+    // username - > firstname + lastname
+    // password -> email head
+    try {
+      // Create user in Firebase Authentication
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: extractUsername(_emailController.text.trim()));
+      // EXTRACT THE INFORMATION FROM PASSWORD
+
+      String uid = userCredential.user!.uid;
+
+      // Save additional teacher data in Firestore
+      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        'uid': uid,
+        'role': "teacher",
+        'email': _emailController.text.trim(),
+        'firstName': _firstNameController.text.trim(),
+        'lastName': _lastNameController.text.trim(),
+        'username': _emailController.text.trim(),
+        'password': extractUsername(_emailController.text.trim()),
+        'dateCreated': FieldValue.serverTimestamp(),
+      });
+
+      print("Teacher account created successfully!");
+    } catch (e) {
+      print("Error creating teacher account: $e");
+    }
+  }
+
+  Future<void> _editTeacherAccount() async {
+    if (widget.uid == null) {
+      print("Error: No teacher uid provided");
+      return;
+    }
+
+    try {
+      // Update the teacher's data in Firestore
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.uid)
+          .update({
+        'firstName': _firstNameController.text.trim(),
+        'lastName': _lastNameController.text.trim(),
+        'email': _emailController.text.trim(),
+        'username': _emailController.text.trim(),
+        'dateRegistered': _dateController.text.trim(),
+      });
+
+      print("Teacher account updated successfully!");
+    } catch (e) {
+      print("Error updating teacher account: $e");
+    }
   }
 
   void _showAddSuccessDialog(BuildContext context) {
@@ -191,6 +279,7 @@ abstract class TeacherFormController extends State<TeacherFormWidget> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                context.pop();
               },
               child: const Text('Continue'),
             ),
