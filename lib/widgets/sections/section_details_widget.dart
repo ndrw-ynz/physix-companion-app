@@ -1,17 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:physix_companion_app/utils.dart';
 
 class SectionDetailsWidget extends StatelessWidget {
   const SectionDetailsWidget(
       {super.key,
       required this.itemNumber,
+      required this.sectionId,
       required this.sectionCode,
+      required this.teacherId,
       required this.teacherAssigned,
-      required this.yearAdded});
+      required this.dateRegistered});
   final int itemNumber;
+  final String sectionId;
   final String sectionCode;
+  final String teacherId;
   final String teacherAssigned;
-  final int yearAdded;
+  final Timestamp dateRegistered;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +52,12 @@ class SectionDetailsWidget extends StatelessWidget {
                     children: <Widget>[
                       IconButton(
                         onPressed: () =>
-                            context.push("/admin_home/sections/edit"),
+                            context.push("/admin_home/sections/edit", extra: {
+                          "sectionId": sectionId,
+                          "sectionName": sectionCode,
+                          "teacherUid": teacherId,
+                          "dateRegistered": dateRegistered,
+                        }),
                         icon: const Icon(Icons.edit),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -84,10 +95,10 @@ class SectionDetailsWidget extends StatelessWidget {
                       ]),
                       const SizedBox(width: 10),
                       Row(children: <Widget>[
-                        const Text("Year Added:",
+                        const Text("Date Registered:",
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         const SizedBox(width: 10),
-                        Text("$yearAdded"),
+                        Text(formatTimestamp(dateRegistered)),
                       ])
                     ],
                   ))
