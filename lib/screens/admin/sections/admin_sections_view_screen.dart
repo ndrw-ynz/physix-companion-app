@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:physix_companion_app/widgets/sections/section_details_widget.dart';
@@ -103,27 +104,80 @@ class _AdminSectionsViewScreenState extends AdminSectionsViewController {
                 ),
               ),
               const SizedBox(height: 20.0),
-              Flexible(
-                  fit: FlexFit.loose,
-                  child: ListView(
-                    children: <Widget>[
-                      SectionDetailsWidget(
-                          itemNumber: 1,
-                          sectionCode: "2934",
-                          teacherAssigned: "De Guzman, Juan Miguel",
-                          yearAdded: 2024),
-                      SectionDetailsWidget(
-                          itemNumber: 2,
-                          sectionCode: "2935",
-                          teacherAssigned: "Delos Santos, Flora Mary",
-                          yearAdded: 2024),
-                      SectionDetailsWidget(
-                          itemNumber: 3,
-                          sectionCode: "3002",
-                          teacherAssigned: "Cruz, Jake Mark",
-                          yearAdded: 2024),
-                    ],
-                  ))
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('sections')
+                      .snapshots(), // Listen for real-time updates on sections
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                          child:
+                              CircularProgressIndicator()); // Show loading indicator
+                    }
+
+                    if (snapshot.hasError) {
+                      return Center(
+                          child: Text(
+                              'Error: ${snapshot.error}')); // Handle errors
+                    }
+
+                    // If we have data
+                    final sections = snapshot.data!.docs.map((doc) {
+                      return {
+                        'id': doc.id,
+                        ...doc.data() as Map<String, dynamic>,
+                      };
+                    }).toList();
+
+                    return ListView.builder(
+                      itemCount: sections.length,
+                      itemBuilder: (context, index) {
+                        final section = sections[index];
+                        final teacherId = section["teacherId"] ?? "";
+
+                        // Fetch the teacher's details by their UID
+                        return FutureBuilder<DocumentSnapshot>(
+                          future: FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(teacherId)
+                              .get(), // Fetch the teacher's details from users collection
+                          builder: (context, teacherSnapshot) {
+                            if (teacherSnapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+
+                            if (teacherSnapshot.hasError) {
+                              return const Center(
+                                  child: Text('Error loading teacher details'));
+                            }
+
+                            // Extract teacher name from the snapshot
+                            final teacherData = teacherSnapshot.data?.data()
+                                as Map<String, dynamic>?;
+                            final teacherName = teacherData != null
+                                ? '${teacherData['lastName']}, ${teacherData['firstName']}'
+                                : 'Unknown teacher'; // Concatenate lastName, firstName
+
+                            return SectionDetailsWidget(
+                              itemNumber: index + 1,
+                              sectionId: section["id"],
+                              sectionCode:
+                                  section["sectionName"] ?? "Unknown name",
+                              teacherAssigned: teacherName,
+                              teacherId: section["teacherId"] ?? "Unknown name",
+                              dateRegistered:
+                                  section["dateCreated"] ?? Timestamp.now(),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+              )
             ],
           ),
         ),
