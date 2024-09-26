@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:physix_companion_app/widgets/sections/section_form_widget.dart';
 
@@ -15,6 +16,9 @@ class AdminSectionsAddScreen extends StatefulWidget {
 class _AdminSectionsAddScreenState extends AdminSectionsAddController {
   @override
   Widget build(BuildContext context) {
-    return const SectionFormWidget(formMode: FormMode.add);
+    return SectionFormWidget(
+      formMode: FormMode.add,
+      dateRegistered: Timestamp.now(),
+    );
   }
 }
