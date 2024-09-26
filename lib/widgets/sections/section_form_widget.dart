@@ -1,11 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:physix_companion_app/utils.dart';
 
 import '../../commons.dart';
 
 class SectionFormWidget extends StatefulWidget {
-  const SectionFormWidget({super.key, required this.formMode});
+  const SectionFormWidget(
+      {super.key,
+      required this.formMode,
+      this.sectionName,
+      this.teacherUid,
+      required this.dateRegistered,
+      this.sectionId});
   final FormMode formMode;
+  final String? sectionId;
+  final String? sectionName;
+  final String? teacherUid;
+  final Timestamp dateRegistered;
 
   @override
   State<SectionFormWidget> createState() => _SectionFormWidgetState();
@@ -47,7 +60,7 @@ class _SectionFormWidgetState extends SectionFormController {
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
-                      controller: _stubCodeController,
+                      controller: _sectionController,
                       style: const TextStyle(color: Colors.black),
                       decoration: const InputDecoration(
                         filled: true,
@@ -61,28 +74,22 @@ class _SectionFormWidgetState extends SectionFormController {
                     ),
                     const SizedBox(height: 10),
                     DropdownButton<String>(
-                      value: selectedValue,
+                      value: selectedTeacherUid,
                       hint: const Text('Select an option'),
                       icon: const Icon(Icons.arrow_drop_down),
                       isExpanded: true,
                       dropdownColor: Colors.white54,
                       style: const TextStyle(color: Colors.black),
-                      items:
-                          options.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
+                      items: dropdownItems,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedValue = newValue;
+                          selectedTeacherUid = newValue!;
                         });
                       },
                     ),
                     const SizedBox(height: 15),
                     const Text(
-                      "Year Registered",
+                      "Date Registered",
                       style: TextStyle(fontSize: 16.0),
                     ),
                     TextFormField(
@@ -101,7 +108,7 @@ class _SectionFormWidgetState extends SectionFormController {
                       child: ElevatedButton(
                           onPressed: () {
                             _showConfirmationDialog(
-                                context, _stubCodeController.text);
+                                context, _sectionController.text);
                           },
                           style: ButtonStyle(),
                           child: Text("${_getModeTypeDesc()} Section")),
@@ -114,16 +121,90 @@ class _SectionFormWidgetState extends SectionFormController {
 }
 
 abstract class SectionFormController extends State<SectionFormWidget> {
-  final TextEditingController _stubCodeController = TextEditingController();
+  final TextEditingController _sectionController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
 
-  String? selectedValue;
-  List<String> options = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
+  String? selectedTeacherUid;
+  List<DropdownMenuItem<String>> dropdownItems = [];
 
   @override
   void initState() {
     super.initState();
     _dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    _fetchAllTeachers();
+
+    if (widget.formMode == FormMode.edit) {
+      // Initialize with existing data if in edit mode
+      _sectionController.text = widget.sectionName ?? '';
+      selectedTeacherUid = widget.teacherUid;
+      _dateController.text = formatTimestamp(widget.dateRegistered);
+    } else {
+      _dateController.text = formatTimestamp(Timestamp.now());
+    }
+  }
+
+  Future<void> _fetchAllTeachers() async {
+    try {
+      QuerySnapshot teacherSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('role', isEqualTo: 'teacher')
+          .get();
+
+      List<DropdownMenuItem<String>> items = teacherSnapshot.docs.map((doc) {
+        String teacherName = "${doc['lastName']}, ${doc['firstName']}";
+        String uid = doc['uid'];
+
+        return DropdownMenuItem<String>(
+          value: uid,
+          child: Text(teacherName),
+        );
+      }).toList();
+
+      // Update the dropdown items
+      setState(() {
+        dropdownItems = items;
+      });
+    } catch (e) {
+      print("Error fetching teachers: $e");
+    }
+  }
+
+  Future<void> _addSection() async {
+    try {
+      DocumentReference sectionRef =
+          FirebaseFirestore.instance.collection('sections').doc();
+
+      // Set section data
+      await sectionRef.set({
+        'sectionName': _sectionController.text.trim(),
+        'teacherId': selectedTeacherUid!,
+        'dateCreated': FieldValue.serverTimestamp(),
+      });
+
+      print("Section added successfully!");
+    } catch (e) {
+      print("Error adding section: $e");
+    }
+  }
+
+  Future<void> _editSection() async {
+    try {
+      // Reference to the existing section document using sectionId
+      DocumentReference sectionRef = FirebaseFirestore.instance
+          .collection('sections')
+          .doc(widget.sectionId);
+
+      // Update the section data
+      await sectionRef.update({
+        'sectionName': _sectionController.text.trim(),
+        'teacherId': selectedTeacherUid!,
+        'dateModified': FieldValue.serverTimestamp(), // Update modified date
+      });
+
+      print("Section updated successfully!");
+    } catch (e) {
+      print("Error updating section: $e");
+    }
   }
 
   String _getModeTypeDesc() {
@@ -156,8 +237,12 @@ abstract class SectionFormController extends State<SectionFormWidget> {
             ),
             TextButton(
               onPressed: () {
+                if (widget.formMode == FormMode.add) {
+                  _addSection();
+                } else if (widget.formMode == FormMode.edit) {
+                  _editSection();
+                }
                 Navigator.of(context).pop();
-                // add logic here for add/edit
                 _showAddSuccessDialog(context);
               },
               child: Text(_getModeTypeDesc()),
@@ -178,6 +263,7 @@ abstract class SectionFormController extends State<SectionFormWidget> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                context.pop();
               },
               child: const Text('Continue'),
             ),
