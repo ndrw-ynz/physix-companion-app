@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:physix_companion_app/services/auth_service.dart';
 
 part "admin_login_controller.dart";
 
@@ -82,7 +84,7 @@ class _AdminLoginScreenState extends AdminLoginController {
                   ),
                   const SizedBox(height: 30.0),
                   ElevatedButton(
-                    onPressed: () => context.go("/admin_home"),
+                    onPressed: () => _validateAdminLogin(),
                     style: ElevatedButton.styleFrom(
                         minimumSize: const Size(double.infinity, 40),
                         shape: const RoundedRectangleBorder(
