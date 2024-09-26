@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:physix_companion_app/widgets/sections/section_form_widget.dart';
 import 'package:physix_companion_app/widgets/teachers/teacher_form_widget.dart';
 import 'commons.dart';
 import 'firebase_options.dart';
@@ -88,7 +89,17 @@ final _router = GoRouter(
                       builder: (context, state) => AdminSectionsAddScreen()),
                   GoRoute(
                       path: "edit",
-                      builder: (context, state) => AdminSectionsEditScreen())
+                      builder: (context, state) {
+                        final extras = state.extra as Map<String, dynamic>?;
+
+                        return SectionFormWidget(
+                          formMode: FormMode.edit,
+                          sectionId: extras?["sectionId"],
+                          sectionName: extras?["sectionName"],
+                          teacherUid: extras?["teacherUid"],
+                          dateRegistered: extras?["dateRegistered"],
+                        );
+                      })
                 ])
           ]),
     ]);
