@@ -11,6 +11,16 @@ abstract class AdminHomeController extends State<AdminHomeScreen> {
     fetchUserSectionCounts();
   }
 
+  Future<void> logOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      print("User logged out successfully");
+      context.go("/");
+    } catch (e) {
+      print("Error logging out: $e");
+    }
+  }
+
   Future<void> fetchUserSectionCounts() async {
     await _fetchTeacherCount();
     await _fetchSectionCount();

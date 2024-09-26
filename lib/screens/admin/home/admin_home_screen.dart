@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -60,7 +61,7 @@ class _AdminHomeScreenState extends AdminHomeController {
               ListTile(
                 leading: const Icon(Icons.exit_to_app_outlined),
                 title: const Text('Logout'),
-                onTap: () {},
+                onTap: () => logOut(),
               ),
             ],
           ),
