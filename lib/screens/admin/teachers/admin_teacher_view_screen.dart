@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:physix_companion_app/widgets/teachers/teacher_details_widget.dart';
@@ -102,33 +103,54 @@ class _AdminTeacherViewScreenState extends AdminTeacherViewController {
                 ),
               ),
               const SizedBox(height: 20.0),
-              Flexible(
-                  fit: FlexFit.loose,
-                  child: ListView(
-                    children: <Widget>[
-                      TeacherDetailsWidget(
-                          itemNumber: 1,
-                          name: "De Guzman, Juan Miguel",
-                          email: "jmdeguzman@gmail.com",
-                          username: "deguzman2312",
-                          password: "sampletext",
-                          yearRegistered: 2024),
-                      TeacherDetailsWidget(
-                          itemNumber: 2,
-                          name: "Delos Santos, Flora Mary",
-                          email: "floramary@gmail.com",
-                          username: "floramary022",
-                          password: "sampletext",
-                          yearRegistered: 2024),
-                      TeacherDetailsWidget(
-                          itemNumber: 3,
-                          name: "Cruz, Jake Mark",
-                          email: "jakecruz@gmail.com",
-                          username: "cruzjake209",
-                          password: "sampletext",
-                          yearRegistered: 2024)
-                    ],
-                  ))
+              Expanded(
+                // Use Expanded for better layout handling
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .where('role', isEqualTo: 'teacher')
+                      .snapshots(), // Listen for real-time updates
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                          child:
+                              CircularProgressIndicator()); // Show loading indicator
+                    }
+
+                    if (snapshot.hasError) {
+                      return Center(
+                          child: Text(
+                              'Error: ${snapshot.error}')); // Handle errors
+                    }
+
+                    // If we have data
+                    final teachers = snapshot.data!.docs.map((doc) {
+                      return {
+                        'id': doc.id,
+                        ...doc.data() as Map<String, dynamic>,
+                      };
+                    }).toList();
+
+                    return ListView.builder(
+                      itemCount: teachers.length,
+                      itemBuilder: (context, index) {
+                        final teacher = teachers[index];
+                        return TeacherDetailsWidget(
+                          itemNumber: index + 1,
+                          uid: teacher["uid"],
+                          lastName: teacher["lastName"] ?? "None",
+                          firstName: teacher["firstName"] ?? "None",
+                          email: teacher['email'] ?? 'Unknown Email',
+                          username: teacher['username'] ?? 'Unknown Username',
+                          password: teacher['password'] ?? 'Unknown Password',
+                          dateRegistered:
+                              teacher['dateCreated'] ?? Timestamp.now(),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
