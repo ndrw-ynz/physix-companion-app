@@ -256,13 +256,11 @@ abstract class TeacherFormController extends State<TeacherFormWidget> {
           .collection('users')
           .doc(widget.uid)
           .update({
+        'email': _emailController.text.trim(),
         'firstName': _firstNameController.text.trim(),
         'lastName': _lastNameController.text.trim(),
-        'email': _emailController.text.trim(),
         'username': _emailController.text.trim(),
-        'dateRegistered': _dateController.text.trim(),
       });
-
       print("Teacher account updated successfully!");
     } catch (e) {
       print("Error updating teacher account: $e");
