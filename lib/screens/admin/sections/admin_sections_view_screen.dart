@@ -51,7 +51,7 @@ class _AdminSectionsViewScreenState extends AdminSectionsViewController {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
-                      //controller: _searchController,
+                      controller: _sectionQueryController,
                       decoration: InputDecoration(
                         hintText: 'Search Section Name',
                         hintStyle: const TextStyle(
@@ -63,7 +63,13 @@ class _AdminSectionsViewScreenState extends AdminSectionsViewController {
                             const EdgeInsets.symmetric(horizontal: 8.0),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.search),
-                          onPressed: () {},
+                          onPressed: () {
+                            if (_sectionQueryController.text.isEmpty) {
+                              _fetchAllSections();
+                            } else {
+                              _filterSectionSearch();
+                            }
+                          },
                         ),
                         filled: true,
                         fillColor: Colors.white,
@@ -71,26 +77,29 @@ class _AdminSectionsViewScreenState extends AdminSectionsViewController {
                     ),
                     const SizedBox(height: 12.0),
                     Container(
+                      padding: const EdgeInsets.all(5.0),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(5.0),
                       ),
-                      child: DropdownMenu<String>(
-                        initialSelection: selectedYear,
-                        dropdownMenuEntries:
-                            years.map<DropdownMenuEntry<String>>((String year) {
-                          return DropdownMenuEntry<String>(
+                      child: DropdownButton<String>(
+                        value: selectedYear,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        items:
+                            years.map<DropdownMenuItem<String>>((String year) {
+                          return DropdownMenuItem<String>(
                             value: year,
-                            label: year, // Black text for dropdown items
+                            child: Text(year),
                           );
                         }).toList(),
-                        onSelected: (String? newValue) {
+                        onChanged: (String? newValue) {
                           setState(() {
-                            selectedYear = newValue;
+                            selectedYear = newValue!;
+                            _filterSectionSearch();
                           });
                         },
-                        menuHeight: 20.0,
-                        label: const Text(
+                        hint: const Text(
                           'Select a year',
                           style: TextStyle(
                             color: Color.fromARGB(255, 0, 0,
@@ -105,75 +114,22 @@ class _AdminSectionsViewScreenState extends AdminSectionsViewController {
               ),
               const SizedBox(height: 20.0),
               Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('sections')
-                      .snapshots(), // Listen for real-time updates on sections
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                          child:
-                              CircularProgressIndicator()); // Show loading indicator
-                    }
+                child: ListView.builder(
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    final section = filteredList[index];
+                    final teacherId = section["teacherId"] ?? "";
 
-                    if (snapshot.hasError) {
-                      return Center(
-                          child: Text(
-                              'Error: ${snapshot.error}')); // Handle errors
-                    }
+                    String teacherFullName =
+                        teacherNames[teacherId] ?? "Unknown Teacher";
 
-                    // If we have data
-                    final sections = snapshot.data!.docs.map((doc) {
-                      return {
-                        'id': doc.id,
-                        ...doc.data() as Map<String, dynamic>,
-                      };
-                    }).toList();
-
-                    return ListView.builder(
-                      itemCount: sections.length,
-                      itemBuilder: (context, index) {
-                        final section = sections[index];
-                        final teacherId = section["teacherId"] ?? "";
-
-                        // Fetch the teacher's details by their UID
-                        return FutureBuilder<DocumentSnapshot>(
-                          future: FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(teacherId)
-                              .get(), // Fetch the teacher's details from users collection
-                          builder: (context, teacherSnapshot) {
-                            if (teacherSnapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            }
-
-                            if (teacherSnapshot.hasError) {
-                              return const Center(
-                                  child: Text('Error loading teacher details'));
-                            }
-
-                            // Extract teacher name from the snapshot
-                            final teacherData = teacherSnapshot.data?.data()
-                                as Map<String, dynamic>?;
-                            final teacherName = teacherData != null
-                                ? '${teacherData['lastName']}, ${teacherData['firstName']}'
-                                : 'Unknown teacher'; // Concatenate lastName, firstName
-
-                            return SectionDetailsWidget(
-                              itemNumber: index + 1,
-                              sectionId: section["id"],
-                              sectionCode:
-                                  section["sectionName"] ?? "Unknown name",
-                              teacherAssigned: teacherName,
-                              teacherId: section["teacherId"] ?? "Unknown name",
-                              dateRegistered:
-                                  section["dateCreated"] ?? Timestamp.now(),
-                            );
-                          },
-                        );
-                      },
+                    return SectionDetailsWidget(
+                      itemNumber: index + 1,
+                      sectionId: section["id"],
+                      sectionCode: section["sectionName"] ?? "Unknown name",
+                      teacherAssigned: teacherFullName,
+                      teacherId: section["teacherId"] ?? "Unknown ID",
+                      dateRegistered: section["dateCreated"] ?? Timestamp.now(),
                     );
                   },
                 ),
