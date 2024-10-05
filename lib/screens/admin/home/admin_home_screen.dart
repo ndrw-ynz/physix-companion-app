@@ -43,7 +43,7 @@ class _AdminHomeScreenState extends AdminHomeController {
               ),
               ListTile(
                 leading: const Icon(Icons.person_2_outlined),
-                title: const Text('Teacher Information'),
+                title: const Text('Teacher Info'),
                 onTap: () => context.push("/admin_home/teachers"),
               ),
               ListTile(
