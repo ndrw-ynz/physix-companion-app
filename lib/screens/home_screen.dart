@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 40.0),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () => {},
+                          onPressed: () => context.go("/teacher_login"),
                           style: ElevatedButton.styleFrom(
                               minimumSize: const Size(double.infinity, 0),
                               shape: const RoundedRectangleBorder(
