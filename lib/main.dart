@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:physix_companion_app/widgets/sections/section_form_widget.dart';
-import 'package:physix_companion_app/widgets/teachers/teacher_form_widget.dart';
 import 'commons.dart';
 import 'firebase_options.dart';
 
@@ -13,7 +11,15 @@ import 'screens/admin/sections/admin_sections_view_screen.dart';
 import 'screens/admin/teachers/admin_teacher_add_screen.dart';
 import 'screens/admin/teachers/admin_teacher_view_screen.dart';
 import 'screens/admin/sections/admin_sections_add_screen.dart';
+import 'screens/teacher/home/teacher_home_screen.dart';
+import 'screens/teacher/login/teacher_forgot_password_screen.dart';
+import 'screens/teacher/login/teacher_login_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/teacher/students/teacher_student_add_screen.dart';
+import 'screens/teacher/students/teacher_student_view_screen.dart';
+import 'widgets/sections/section_form_widget.dart';
+import 'widgets/students/student_form_widget.dart';
+import 'widgets/teachers/teacher_form_widget.dart';
 import 'services/auth_service.dart';
 
 final _router = GoRouter(
@@ -34,6 +40,11 @@ final _router = GoRouter(
         case "admin":
           if (isLoggedIn && state.matchedLocation == "/admin_login") {
             return "/admin_home";
+          }
+          break;
+        case "teacher":
+          if (isLoggedIn && state.matchedLocation == "/teacher_login") {
+            return "/teacher_home";
           }
           break;
       }
@@ -101,6 +112,42 @@ final _router = GoRouter(
                       })
                 ])
           ]),
+      GoRoute(
+          path: "/teacher_login",
+          builder: (context, state) => TeacherLoginScreen(),
+          routes: <RouteBase>[
+            GoRoute(
+                path: "forgot_password",
+                builder: (context, state) => TeacherForgotPasswordScreen())
+          ]),
+      GoRoute(
+          path: "/teacher_home",
+          builder: (context, state) => TeacherHomeScreen(),
+          routes: <RouteBase>[
+            GoRoute(
+                path: "students",
+                builder: (context, state) => TeacherStudentViewScreen(),
+                routes: <RouteBase>[
+                  GoRoute(
+                      path: "add",
+                      builder: (context, state) => TeacherStudentAddScreen()),
+                  GoRoute(
+                      path: "edit",
+                      builder: (context, state) {
+                        final extras = state.extra as Map<String, dynamic>?;
+
+                        return StudentFormWidget(
+                          formMode: FormMode.edit,
+                          id: extras?['id'],
+                          firstName: extras?['firstName'],
+                          lastName: extras?['lastName'],
+                          email: extras?['email'],
+                          sectionId: extras?['sectionId'],
+                          dateRegistered: extras?['dateRegistered'],
+                        );
+                      })
+                ])
+          ])
     ]);
 
 Future<void> main() async {
