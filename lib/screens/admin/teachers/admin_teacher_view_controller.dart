@@ -65,11 +65,9 @@ abstract class AdminTeacherViewController
       for (var doc in snapshot.docs) {
         Timestamp timestamp = doc["dateCreated"];
 
-        if (timestamp != null) {
-          DateTime dateTime = timestamp.toDate();
+        DateTime dateTime = timestamp.toDate();
 
-          uniqueYears.add(dateTime.year.toString());
-        }
+        uniqueYears.add(dateTime.year.toString());
       }
 
       setState(() {
