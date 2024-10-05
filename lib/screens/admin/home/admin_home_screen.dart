@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+part "admin_home_controller.dart";
 
 class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({super.key});
@@ -8,7 +12,7 @@ class AdminHomeScreen extends StatefulWidget {
   State<AdminHomeScreen> createState() => _AdminHomeScreenState();
 }
 
-class _AdminHomeScreenState extends State<AdminHomeScreen> {
+class _AdminHomeScreenState extends AdminHomeController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +43,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.person_2_outlined),
-                title: const Text('Teacher Information'),
+                title: const Text('Teacher Info'),
                 onTap: () => context.push("/admin_home/teachers"),
               ),
               ListTile(
@@ -57,7 +61,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               ListTile(
                 leading: const Icon(Icons.exit_to_app_outlined),
                 title: const Text('Logout'),
-                onTap: () {},
+                onTap: () => logOut(),
               ),
             ],
           ),
@@ -68,14 +72,14 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              _buildTile(context, Icons.person, "Teachers", "{n} Teachers",
-                  "/admin_home/teachers"),
+              _buildTile(context, Icons.person, "Teachers",
+                  "$teacherCount Teacher(s)", "/admin_home/teachers"),
               const SizedBox(height: 25.0),
-              _buildTile(context, Icons.person, "Sections", "{n} Sections",
-                  "/admin_home/sections"),
+              _buildTile(context, Icons.person, "Sections",
+                  "$sectionCount Section(s)", "/admin_home/sections"),
               const SizedBox(height: 25.0),
-              _buildTile(context, Icons.person, "Students", "{n} Students",
-                  "/admin_home"),
+              _buildTile(context, Icons.person, "Students",
+                  "$studentCount Student(s)", "/admin_home"),
             ],
           ),
         )));

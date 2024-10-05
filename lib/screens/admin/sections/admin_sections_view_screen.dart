@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:physix_companion_app/widgets/sections/section_details_widget.dart';
 
-part '../../../controllers/admin/sections/admin_sections_view_controller.dart';
+part 'admin_sections_view_controller.dart';
 
 class AdminSectionsViewScreen extends StatefulWidget {
   const AdminSectionsViewScreen({super.key});
@@ -50,7 +51,7 @@ class _AdminSectionsViewScreenState extends AdminSectionsViewController {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
-                      //controller: _searchController,
+                      controller: _sectionQueryController,
                       decoration: InputDecoration(
                         hintText: 'Search Section Name',
                         hintStyle: const TextStyle(
@@ -62,7 +63,13 @@ class _AdminSectionsViewScreenState extends AdminSectionsViewController {
                             const EdgeInsets.symmetric(horizontal: 8.0),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.search),
-                          onPressed: () {},
+                          onPressed: () {
+                            if (_sectionQueryController.text.isEmpty) {
+                              _fetchAllSections();
+                            } else {
+                              _filterSectionSearch();
+                            }
+                          },
                         ),
                         filled: true,
                         fillColor: Colors.white,
@@ -70,26 +77,29 @@ class _AdminSectionsViewScreenState extends AdminSectionsViewController {
                     ),
                     const SizedBox(height: 12.0),
                     Container(
+                      padding: const EdgeInsets.all(5.0),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(8.0),
+                        borderRadius: BorderRadius.circular(5.0),
                       ),
-                      child: DropdownMenu<String>(
-                        initialSelection: selectedYear,
-                        dropdownMenuEntries:
-                            years.map<DropdownMenuEntry<String>>((String year) {
-                          return DropdownMenuEntry<String>(
+                      child: DropdownButton<String>(
+                        value: selectedYear,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        items:
+                            years.map<DropdownMenuItem<String>>((String year) {
+                          return DropdownMenuItem<String>(
                             value: year,
-                            label: year, // Black text for dropdown items
+                            child: Text(year),
                           );
                         }).toList(),
-                        onSelected: (String? newValue) {
+                        onChanged: (String? newValue) {
                           setState(() {
-                            selectedYear = newValue;
+                            selectedYear = newValue!;
+                            _filterSectionSearch();
                           });
                         },
-                        menuHeight: 20.0,
-                        label: const Text(
+                        hint: const Text(
                           'Select a year',
                           style: TextStyle(
                             color: Color.fromARGB(255, 0, 0,
@@ -103,27 +113,27 @@ class _AdminSectionsViewScreenState extends AdminSectionsViewController {
                 ),
               ),
               const SizedBox(height: 20.0),
-              Flexible(
-                  fit: FlexFit.loose,
-                  child: ListView(
-                    children: <Widget>[
-                      SectionDetailsWidget(
-                          itemNumber: 1,
-                          sectionCode: "2934",
-                          teacherAssigned: "De Guzman, Juan Miguel",
-                          yearAdded: 2024),
-                      SectionDetailsWidget(
-                          itemNumber: 2,
-                          sectionCode: "2935",
-                          teacherAssigned: "Delos Santos, Flora Mary",
-                          yearAdded: 2024),
-                      SectionDetailsWidget(
-                          itemNumber: 3,
-                          sectionCode: "3002",
-                          teacherAssigned: "Cruz, Jake Mark",
-                          yearAdded: 2024),
-                    ],
-                  ))
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    final section = filteredList[index];
+                    final teacherId = section["teacherId"] ?? "";
+
+                    String teacherFullName =
+                        teacherNames[teacherId] ?? "Unknown Teacher";
+
+                    return SectionDetailsWidget(
+                      itemNumber: index + 1,
+                      sectionId: section["id"],
+                      sectionCode: section["sectionName"] ?? "Unknown name",
+                      teacherAssigned: teacherFullName,
+                      teacherId: section["teacherId"] ?? "Unknown ID",
+                      dateRegistered: section["dateCreated"] ?? Timestamp.now(),
+                    );
+                  },
+                ),
+              )
             ],
           ),
         ),

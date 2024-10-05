@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "421057789625",
+    "project_id": "physix-9c8bd",
+    "storage_bucket": "physix-9c8bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421057789625:android:2dbd768907809faec9e568",
+        "android_client_info": {
+          "package_name": "com.ndrw_ynz.physix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXBcpUw0dNTpqdx6uT4q67qFt45c1_Ds0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

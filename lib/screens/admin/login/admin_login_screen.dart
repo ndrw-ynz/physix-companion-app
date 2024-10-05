@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:physix_companion_app/services/auth_service.dart';
+
+part "admin_login_controller.dart";
 
 class AdminLoginScreen extends StatefulWidget {
   const AdminLoginScreen({super.key});
@@ -8,7 +12,7 @@ class AdminLoginScreen extends StatefulWidget {
   State<AdminLoginScreen> createState() => _AdminLoginScreenState();
 }
 
-class _AdminLoginScreenState extends State<AdminLoginScreen> {
+class _AdminLoginScreenState extends AdminLoginController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,9 +42,10 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                     "Username/Email",
                     style: TextStyle(color: Colors.white),
                   ),
-                  const TextField(
-                    style: TextStyle(color: Colors.black),
-                    decoration: InputDecoration(
+                  TextField(
+                    controller: _usernameController,
+                    style: const TextStyle(color: Colors.black),
+                    decoration: const InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(),
@@ -54,21 +59,32 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                     "Password",
                     style: TextStyle(color: Colors.white),
                   ),
-                  const TextField(
-                    obscureText: true,
-                    style: TextStyle(color: Colors.black),
+                  TextField(
+                    controller: _passwordController,
+                    obscureText: _isObscured,
+                    style: const TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(
+                        border: const OutlineInputBorder(),
+                        prefixIcon: const Icon(
                           Icons.lock_outline,
                           color: Colors.black,
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(_isObscured
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                          onPressed: () {
+                            setState(() {
+                              _isObscured = !_isObscured;
+                            });
+                          },
                         )),
                   ),
                   const SizedBox(height: 30.0),
                   ElevatedButton(
-                    onPressed: () => context.go("/admin_home"),
+                    onPressed: () => _validateAdminLogin(),
                     style: ElevatedButton.styleFrom(
                         minimumSize: const Size(double.infinity, 40),
                         shape: const RoundedRectangleBorder(
