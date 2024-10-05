@@ -7,7 +7,6 @@ import 'commons.dart';
 import 'firebase_options.dart';
 
 import 'screens/admin/login/admin_login_screen.dart';
-import 'screens/admin/sections/admin_sections_edit_screen.dart';
 import 'screens/admin/login/admin_forgot_password_screen.dart';
 import 'screens/admin/home/admin_home_screen.dart';
 import 'screens/admin/sections/admin_sections_view_screen.dart';
