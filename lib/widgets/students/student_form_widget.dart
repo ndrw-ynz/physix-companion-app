@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -213,6 +214,32 @@ abstract class StudentFormController extends State<StudentFormWidget> {
     }
   }
 
+  Future<void> _addStudentAccount() async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: extractUsername(_emailController.text.trim()));
+
+      String uid = userCredential.user!.uid;
+
+      await FirebaseFirestore.instance.collection('students').doc(uid).set({
+        'uid': uid,
+        'email': _emailController.text.trim(),
+        'firstName': _firstNameController.text.trim(),
+        'lastName': _lastNameController.text.trim(),
+        'username': _emailController.text.trim(),
+        'password': extractUsername(_emailController.text.trim()),
+        'sectionId': selectedSectionId,
+        'dateCreated': FieldValue.serverTimestamp(),
+      });
+
+      print("Student account created successfully!");
+    } catch (e) {
+      print("Error creating student account: $e");
+    }
+  }
+
   String _getModeTypeDesc() {
     return widget.formMode == FormMode.add ? "Add" : "Edit";
   }
@@ -222,9 +249,9 @@ abstract class StudentFormController extends State<StudentFormWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('${_getModeTypeDesc()} Teacher'),
+          title: Text('${_getModeTypeDesc()} Student'),
           content: Text(
-              'Are you sure you want to ${_getModeTypeDesc()} $studentName?'),
+              'Are you sure you want to ${_getModeTypeDesc().toLowerCase()} $studentName?'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -235,7 +262,7 @@ abstract class StudentFormController extends State<StudentFormWidget> {
             TextButton(
               onPressed: () {
                 if (widget.formMode == FormMode.add) {
-                  // _addStudentAccount();
+                  _addStudentAccount();
                 } else if (widget.formMode == FormMode.edit) {
                   // _editStudentAccount();
                 }
@@ -255,7 +282,8 @@ abstract class StudentFormController extends State<StudentFormWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Student ${_getModeTypeDesc()}ed Successfully'),
+          title: Text(
+              'Student ${_getModeTypeDesc().toLowerCase()}ed Successfully'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
