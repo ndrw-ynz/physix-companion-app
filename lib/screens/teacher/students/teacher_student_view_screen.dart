@@ -53,7 +53,7 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
-                      controller: _teacherQueryController,
+                      controller: _studentQueryController,
                       decoration: InputDecoration(
                         hintText: "Search Student's Name",
                         hintStyle: const TextStyle(
@@ -66,7 +66,9 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.search),
                           onPressed: () {
-                            setState(() {});
+                            setState(() {
+                              _filterStudentSearch();
+                            });
                           },
                         ),
                         filled: true,
@@ -104,35 +106,27 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                 ),
               ),
               const SizedBox(height: 20.0),
-              StudentDetailsWidget(
-                studentId: "lol",
-                lastName: "mario",
-                firstName: "juan",
-                email: "dummy@gmail.com",
-                username: "meok",
-                password: "hello",
-                sectionId: "some",
-                sectionName: "9201",
-                dateRegistered: Timestamp.now(),
-              )
-              // Expanded(
-              //   child: ListView.builder(
-              //     itemCount: filteredList.length,
-              //     itemBuilder: (context, index) {
-              //       final teacher = filteredList[index];
-              //       return TeacherDetailsWidget(
-              //         itemNumber: index + 1,
-              //         uid: teacher["uid"],
-              //         lastName: teacher["lastName"] ?? "None",
-              //         firstName: teacher["firstName"] ?? "None",
-              //         email: teacher['email'] ?? 'Unknown Email',
-              //         username: teacher['username'] ?? 'Unknown Username',
-              //         password: teacher['password'] ?? 'Unknown Password',
-              //         dateRegistered: teacher['dateCreated'] ?? Timestamp.now(),
-              //       );
-              //     },
-              //   ),
-              // ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredStudentList.length,
+                  itemBuilder: (context, index) {
+                    final student = filteredStudentList[index];
+                    String sectionId = sectionIds[student["sectionId"]] ?? "";
+
+                    return StudentDetailsWidget(
+                      studentId: student["id"],
+                      lastName: student["lastName"],
+                      firstName: student["firstName"],
+                      email: student["email"],
+                      username: student["username"],
+                      password: student["password"],
+                      sectionId: student["sectionId"],
+                      sectionName: sectionId,
+                      dateRegistered: student["dateCreated"],
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
