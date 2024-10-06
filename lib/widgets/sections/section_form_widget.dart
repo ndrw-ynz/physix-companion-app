@@ -11,13 +11,13 @@ class SectionFormWidget extends StatefulWidget {
       {super.key,
       required this.formMode,
       this.sectionName,
-      this.teacherUid,
+      this.teacherId,
       required this.dateRegistered,
       this.sectionId});
   final FormMode formMode;
   final String? sectionId;
   final String? sectionName;
-  final String? teacherUid;
+  final String? teacherId;
   final Timestamp dateRegistered;
 
   @override
@@ -136,7 +136,7 @@ abstract class SectionFormController extends State<SectionFormWidget> {
     if (widget.formMode == FormMode.edit) {
       // Initialize with existing data if in edit mode
       _sectionController.text = widget.sectionName ?? '';
-      selectedTeacherUid = widget.teacherUid;
+      selectedTeacherUid = widget.teacherId;
       _dateController.text = formatTimestamp(widget.dateRegistered);
     } else {
       _dateController.text = formatTimestamp(Timestamp.now());
@@ -152,10 +152,10 @@ abstract class SectionFormController extends State<SectionFormWidget> {
 
       List<DropdownMenuItem<String>> items = teacherSnapshot.docs.map((doc) {
         String teacherName = "${doc['lastName']}, ${doc['firstName']}";
-        String uid = doc['uid'];
+        String id = doc.id;
 
         return DropdownMenuItem<String>(
-          value: uid,
+          value: id,
           child: Text(teacherName),
         );
       }).toList();

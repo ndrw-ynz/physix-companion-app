@@ -107,7 +107,7 @@ final _router = GoRouter(
                           formMode: FormMode.edit,
                           sectionId: extras?["sectionId"],
                           sectionName: extras?["sectionName"],
-                          teacherUid: extras?["teacherUid"],
+                          teacherId: extras?["teacherId"],
                           dateRegistered: extras?["dateRegistered"],
                         );
                       })

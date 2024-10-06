@@ -55,7 +55,7 @@ class SectionDetailsWidget extends StatelessWidget {
                             context.push("/admin_home/sections/edit", extra: {
                           "sectionId": sectionId,
                           "sectionName": sectionCode,
-                          "teacherUid": teacherId,
+                          "teacherId": teacherId,
                           "dateRegistered": dateRegistered,
                         }),
                         icon: const Icon(Icons.edit),
