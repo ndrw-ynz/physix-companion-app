@@ -11,6 +11,7 @@ import 'screens/admin/sections/admin_sections_view_screen.dart';
 import 'screens/admin/teachers/admin_teacher_add_screen.dart';
 import 'screens/admin/teachers/admin_teacher_view_screen.dart';
 import 'screens/admin/sections/admin_sections_add_screen.dart';
+import 'screens/teacher/change_password/teacher_change_password_screen.dart';
 import 'screens/teacher/home/teacher_home_screen.dart';
 import 'screens/teacher/login/teacher_forgot_password_screen.dart';
 import 'screens/teacher/login/teacher_login_screen.dart';
@@ -146,7 +147,10 @@ final _router = GoRouter(
                           dateRegistered: extras?['dateRegistered'],
                         );
                       })
-                ])
+                ]),
+            GoRoute(
+                path: "change_password",
+                builder: (context, state) => TeacherChangePasswordScreen())
           ])
     ]);
 

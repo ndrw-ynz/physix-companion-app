@@ -53,7 +53,7 @@ class _TeacherHomeScreenState extends TeacherHomeController {
               ListTile(
                 leading: const Icon(Icons.lock_reset),
                 title: const Text('Change Password'),
-                onTap: () {},
+                onTap: () => context.push("/teacher_home/change_password"),
               ),
               ListTile(
                 leading: const Icon(Icons.exit_to_app_outlined),
