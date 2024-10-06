@@ -17,6 +17,7 @@ abstract class TeacherStudentViewController
 
     _fetchAllSections();
     _fetchAllStudents();
+    _filterStudentSearch();
     _listenToCollectionChanges();
   }
 

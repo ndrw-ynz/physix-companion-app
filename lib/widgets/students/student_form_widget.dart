@@ -247,6 +247,26 @@ abstract class StudentFormController extends State<StudentFormWidget> {
     }
   }
 
+  Future<void> _editStudentAccount() async {
+    try {
+      // Reference to the existing section document using sectionId
+      DocumentReference sectionRef =
+          FirebaseFirestore.instance.collection('students').doc(widget.id);
+
+      // Update the section data
+      await sectionRef.update({
+        'firstName': _firstNameController.text.trim(),
+        'lastName': _lastNameController.text.trim()!,
+        'email': _emailController.text.trim(),
+        'sectionId': selectedSectionId
+      });
+
+      print("Section updated successfully!");
+    } catch (e) {
+      print("Error updating section: $e");
+    }
+  }
+
   String _getModeTypeDesc() {
     return widget.formMode == FormMode.add ? "Add" : "Edit";
   }
@@ -271,7 +291,7 @@ abstract class StudentFormController extends State<StudentFormWidget> {
                 if (widget.formMode == FormMode.add) {
                   _addStudentAccount();
                 } else if (widget.formMode == FormMode.edit) {
-                  // _editStudentAccount();
+                  _editStudentAccount();
                 }
                 Navigator.of(context).pop();
                 _showSuccessDialog(context);
