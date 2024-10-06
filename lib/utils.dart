@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 String extractUsername(String email) {
@@ -20,4 +21,27 @@ String extractUsername(String email) {
 String formatTimestamp(Timestamp timestamp) {
   DateTime dateTime = timestamp.toDate(); // Convert Timestamp to DateTime
   return DateFormat('yyyy-MM-dd – kk:mm').format(dateTime); // Format DateTime
+}
+
+Future<Map<String, dynamic>?> getUserProfile() async {
+  User? user = FirebaseAuth.instance.currentUser;
+
+  if (user != null) {
+    try {
+      DocumentSnapshot doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (doc.exists) {
+        return doc.data() as Map<String, dynamic>;
+      } else {
+        print('No user profile found');
+      }
+    } catch (e) {
+      print('Error fetching user profile: $e');
+    }
+  }
+
+  return null;
 }
