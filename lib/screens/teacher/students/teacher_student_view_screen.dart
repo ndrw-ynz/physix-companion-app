@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:physix_companion_app/utils.dart';
 
 import '../../../widgets/students/student_details_widget.dart';
 
@@ -80,19 +81,13 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                       child: DropdownButton<String>(
-                        value: selectedSection,
+                        value: selectedSectionId,
                         icon: const Icon(Icons.arrow_downward),
                         elevation: 16,
-                        items: years
-                            .map<DropdownMenuItem<String>>((String section) {
-                          return DropdownMenuItem<String>(
-                            value: section,
-                            child: Text(section),
-                          );
-                        }).toList(),
+                        items: dropdownSectionItems,
                         onChanged: (String? newValue) {
                           setState(() {
-                            selectedSection = newValue!;
+                            selectedSectionId = newValue!;
                           });
                         },
                         hint: const Text(

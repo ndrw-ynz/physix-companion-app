@@ -193,8 +193,12 @@ abstract class StudentFormController extends State<StudentFormWidget> {
 
   Future<void> _fetchAllSections() async {
     try {
-      QuerySnapshot sectionSnapshot =
-          await FirebaseFirestore.instance.collection('sections').get();
+      Map<String, dynamic>? teacherProfile = await getUserProfile();
+
+      QuerySnapshot sectionSnapshot = await FirebaseFirestore.instance
+          .collection('sections')
+          .where("teacherId", isEqualTo: teacherProfile!["id"])
+          .get();
 
       List<DropdownMenuItem<String>> items = sectionSnapshot.docs.map((doc) {
         String sectionName = doc['sectionName'];
@@ -208,6 +212,9 @@ abstract class StudentFormController extends State<StudentFormWidget> {
       // Update the dropdown items
       setState(() {
         dropdownSectionItems = items;
+        selectedSectionId = dropdownSectionItems.isNotEmpty
+            ? dropdownSectionItems[0].value
+            : null;
       });
     } catch (e) {
       print("Error fetching sections: $e");
