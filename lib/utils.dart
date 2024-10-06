@@ -34,7 +34,9 @@ Future<Map<String, dynamic>?> getUserProfile() async {
           .get();
 
       if (doc.exists) {
-        return doc.data() as Map<String, dynamic>;
+        Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+        userData['id'] = doc.id;
+        return userData;
       } else {
         print('No user profile found');
       }
