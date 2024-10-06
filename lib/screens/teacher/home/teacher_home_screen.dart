@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../utils.dart';
+
 part "teacher_home_controller.dart";
 
 class TeacherHomeScreen extends StatefulWidget {
@@ -16,7 +18,7 @@ class _TeacherHomeScreenState extends TeacherHomeController {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Welcome, TEACHER"),
+          title: Text("Welcome, ${teacherDisplayName ?? "Teacher"}"),
           elevation: 0,
           backgroundColor: Colors.white,
           shape: const Border(
