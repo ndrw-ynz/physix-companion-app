@@ -7,6 +7,7 @@ import '../../utils.dart';
 class StudentDetailsWidget extends StatefulWidget {
   const StudentDetailsWidget(
       {super.key,
+      required this.itemNumber,
       required this.studentId,
       required this.lastName,
       required this.firstName,
@@ -16,6 +17,8 @@ class StudentDetailsWidget extends StatefulWidget {
       required this.sectionId,
       required this.sectionName,
       required this.dateRegistered});
+
+  final int itemNumber;
   final String studentId;
   final String lastName;
   final String firstName;
@@ -49,11 +52,14 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      // Space between texts
-                      const SizedBox(width: 25),
+                      const SizedBox(width: 10),
+                      Text("${widget.itemNumber}. ",
+                          style: const TextStyle(
+                              fontSize: 22.0, fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 10), // Space between texts
                       Text("${widget.lastName}, ${widget.firstName}",
                           style: const TextStyle(
-                              fontSize: 16.0,
+                              fontSize: 18.0,
                               fontStyle: FontStyle.italic,
                               fontWeight: FontWeight.bold)),
                     ],
@@ -131,7 +137,7 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(width: 10),
-                        Text("${widget.sectionName}"),
+                        Text("${widget.sectionId}"),
                       ]),
                       const SizedBox(width: 10),
                       Row(children: <Widget>[
