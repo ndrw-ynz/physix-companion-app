@@ -33,7 +33,7 @@ abstract class TeacherStudentViewController
       });
 
       filteredList = List.from(studentList);
-
+      _filterStudentSearch();  // Re-filter students after gathering sections
     } catch (e) {
       print("Error fetching all students: $e");
     }
@@ -66,12 +66,10 @@ abstract class TeacherStudentViewController
       String? teacherId = FirebaseAuth.instance.currentUser?.uid;
 
       QuerySnapshot sectionSnapshot = await FirebaseFirestore.instance
-          .collection('sections')  // Assuming sections are in the 'sections' collection
+          .collection('sections')
           .where('teacherId', isEqualTo: teacherId)
           .get();
 
-      // Debug: print the names of the subcollections (sectionId)
-      print("Subcollection names (sectionId) fetched: ");
       for (var doc in sectionSnapshot.docs) {
         final data = doc.data() as Map<String, dynamic>?;
         if (data != null && data.containsKey("sectionName")) {
@@ -79,8 +77,6 @@ abstract class TeacherStudentViewController
           String sectionName = data["sectionName"].toString();  // The sectionName to display
           uniqueSections.add(sectionName);  // Add section name to set (avoids duplicates)
           sectionIdToNameMap[sectionId] = sectionName;  // Map sectionId to sectionName
-
-          // Debugging: print the sectionId (subcollection name) and sectionName
         }
       }
 
@@ -90,7 +86,6 @@ abstract class TeacherStudentViewController
         sectionIdToName = sectionIdToNameMap;  // Store the mapping for future reference
       });
 
-      _filterStudentSearch();  // Re-filter students after gathering sections
     } catch (e) {
       print("Error fetching sections: $e");
     }
