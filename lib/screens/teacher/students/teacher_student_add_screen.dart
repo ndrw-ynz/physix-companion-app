@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:physix_companion_app/commons.dart';
 import 'package:physix_companion_app/widgets/students/student_form_widget.dart';
 
+part 'teacher_student_add_controller.dart';
+
 class TeacherStudentAddScreen extends StatefulWidget {
   const TeacherStudentAddScreen({super.key});
 
