@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -259,21 +260,17 @@ abstract class StudentFormController extends State<StudentFormWidget> {
 
   Future<void> _addStudentAccount() async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: extractUsername(_emailController.text.trim()));
+      // Manually create a new student document in Firestore without Firebase Authentication
+      String uid = generateUID(); // Generate a unique ID using the custom function
 
-      String uid = userCredential.user!.uid;
-
+      // Save student data in Firestore
       await FirebaseFirestore.instance.collection('students').doc(uid).set({
         'uid': uid,
-        'role': "student",
         'email': _emailController.text.trim(),
         'firstName': _firstNameController.text.trim(),
         'lastName': _lastNameController.text.trim(),
         'username': _emailController.text.trim(),
-        'password': extractUsername(_emailController.text.trim()),
+        'password': extractUsername(_emailController.text.trim()),  // DO NOT store plain passwords! Use hashing
         'dateCreated': FieldValue.serverTimestamp(),
         'sectionId': selectedSectionId,
       });
@@ -282,6 +279,7 @@ abstract class StudentFormController extends State<StudentFormWidget> {
       print("Error creating student account: $e");
     }
   }
+
 
   void _showSuccessDialog(BuildContext context) {
     showDialog(
@@ -301,5 +299,15 @@ abstract class StudentFormController extends State<StudentFormWidget> {
         );
       },
     );
+  }
+
+  String generateUID() {
+    const String chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    Random random = Random();
+    String uid = '';
+    for (int i = 0; i < 28; i++) { // 22 characters long, similar to the example UIDs
+      uid += chars[random.nextInt(chars.length)];
+    }
+    return uid;
   }
 }
