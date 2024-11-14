@@ -123,7 +123,7 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                     final student = filteredList[index];
                     return StudentDetailsWidget(
                       itemNumber: index + 1,
-                      studentId: student["studentId"] ?? "Unknown ID",
+                      uid: student["uid"] ?? "Unknown ID",
                       lastName: student["lastName"] ?? "None",
                       firstName: student["firstName"] ?? "None",
                       email: student['email'] ?? 'Unknown Email',

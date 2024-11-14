@@ -138,7 +138,8 @@ final _router = GoRouter(
                         final extras = state.extra as Map<String, dynamic>?;
 
                         return StudentFormWidget(
-                          formMode: FormMode.edit, uid: extras?['uid'],
+                          formMode: FormMode.edit,
+                          uid: extras?['uid'],
                           firstName: extras?['firstName'],
                           lastName: extras?['lastName'],
                           email: extras?['email'],

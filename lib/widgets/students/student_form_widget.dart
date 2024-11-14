@@ -222,7 +222,16 @@ abstract class StudentFormController extends State<StudentFormWidget> {
   }
 
   String _getModeTypeDesc() {
-    return widget.formMode == FormMode.add ? "Add" : "Edit";
+    String result;
+    switch (widget.formMode){
+      case FormMode.add:
+        result = "Add";
+        break;
+      case FormMode.edit:
+        result = "Edit";
+        break;
+    }
+    return result;
   }
 
   void _showConfirmationDialog(BuildContext context, String studentName) {
@@ -245,7 +254,7 @@ abstract class StudentFormController extends State<StudentFormWidget> {
                 if (widget.formMode == FormMode.add) {
                   _addStudentAccount();
                 } else if (widget.formMode == FormMode.edit) {
-                  //_editStudentAccount();
+                  _editStudentAccount();
                 }
                 Navigator.of(context).pop();
                 _showSuccessDialog(context);
@@ -277,6 +286,28 @@ abstract class StudentFormController extends State<StudentFormWidget> {
       print("Student account created successfully!");
     } catch (e) {
       print("Error creating student account: $e");
+    }
+  }
+
+  Future<void> _editStudentAccount() async {
+    if (widget.uid == null) {
+      print("Error: No student uid provided");
+      return;
+    }
+    try {
+      await FirebaseFirestore.instance
+          .collection('students')
+          .doc(widget.uid)
+          .update({
+        'email': _emailController.text.trim(),
+        'firstName': _firstNameController.text.trim(),
+        'lastName': _lastNameController.text.trim(),
+        'username': _emailController.text.trim(),
+        'sectionId': selectedSectionId!,
+      });
+      print("Student account updated successfully!");
+    } catch (e) {
+      print("Error updating student account: $e");
     }
   }
 

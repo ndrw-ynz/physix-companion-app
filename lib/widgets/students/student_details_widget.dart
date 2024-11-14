@@ -8,7 +8,7 @@ class StudentDetailsWidget extends StatefulWidget {
   const StudentDetailsWidget(
       {super.key,
       required this.itemNumber,
-      required this.studentId,
+      required this.uid,
       required this.lastName,
       required this.firstName,
       required this.email,
@@ -19,7 +19,7 @@ class StudentDetailsWidget extends StatefulWidget {
       required this.dateRegistered});
 
   final int itemNumber;
-  final String studentId;
+  final String uid;
   final String lastName;
   final String firstName;
   final String email;
@@ -70,7 +70,7 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
                       IconButton(
                         onPressed: () =>
                             context.push("/teacher_home/students/edit", extra: {
-                          "id": widget.studentId,
+                          "uid": widget.uid,
                           "firstName": widget.firstName,
                           "lastName": widget.lastName,
                           "email": widget.email,
