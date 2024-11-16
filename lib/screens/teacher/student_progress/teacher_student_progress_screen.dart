@@ -181,39 +181,52 @@ class _TeacherStudentProgressScreenState extends TeacherStudentProgressControlle
                 ),
               ),
               const SizedBox(height: 20.0),
-              BasicStudentProgressDetailsWidget(
-                  itemNumber: 1,
-                  lastName: "lastName",
-                  firstName: "firstName",
-                  difficulty: "Easy",
-                  lessonNumber: 1,
-                  isAccomplished: true,)
-              // Student List Display
-              /*Expanded(
-                child: filteredList.isNotEmpty
-                    ? ListView.builder(
+              Expanded(
+                child: ListView.builder(
                   itemCount: filteredList.length,
                   itemBuilder: (context, index) {
-                    final student = filteredList[index];
-                    return StudentDetailsWidget(
+                    final student_progress = filteredList[index];
+
+                    // Initialize default values
+                    int lessonNumber = selectedLessonNumber ?? 0;  // Default to selected lesson number
+                    String difficulty = selectedDifficulty ?? "Easy";  // Default to selected difficulty
+                    bool isAccomplished = false;
+
+                    // Filter lesson attempts based on selected lesson number and difficulty
+                    for (var attempt in lessonAttempts) {
+                      // Debugging: Print the document ID and the student IDs being compared
+                      print('Comparing Student ID: ${student_progress['id']} with Attempt Student ID: ${attempt['studentId']}');
+                      print('Attempt Document ID: ${attempt['id']}');
+
+                      if (attempt['studentId'] == student_progress['id'] &&
+                          attempt['difficulty'] == difficulty) {
+
+                        // Debugging: Print out the attempt data
+                        print('Attempt Data for Student ${student_progress['firstName']} ${student_progress['lastName']}: $attempt');
+
+                        // Check if any of the filtered attempts are accomplished
+                        if (attempt['isAccomplished'] == true) {
+                          print('Found Accomplished Attempt: ${attempt['isAccomplished']}');
+                          isAccomplished = true;
+                          break;  // If any is accomplished, no need to check further
+                        }
+                      }
+                    }
+
+                    // Return the widget for each student
+                    return BasicStudentProgressDetailsWidget(
                       itemNumber: index + 1,
-                      uid: student["uid"] ?? "Unknown ID",
-                      lastName: student["lastName"] ?? "None",
-                      firstName: student["firstName"] ?? "None",
-                      email: student['email'] ?? 'Unknown Email',
-                      username: student['username'] ?? 'Unknown Username',
-                      password: student['password'] ?? 'Unknown Password',
-                      sectionId: student['sectionId'] ?? 'Unknown Section ID',
-                      sectionName: student['sectionName'] ??
-                          'Unknown Section Name',
-                      dateRegistered: student['dateCreated'] ?? Timestamp.now(),
+                      lastName: student_progress["lastName"] ?? "None",
+                      firstName: student_progress["firstName"] ?? "None",
+                      difficulty: difficulty,
+                      lessonNumber: lessonNumber,
+                      isAccomplished: isAccomplished,  // Show accomplished status
                     );
                   },
-                )
-                    : const Center(
-                  child: Text("No students found"),
                 ),
-              ),*/
+              )
+
+
             ],
           ),
         ),

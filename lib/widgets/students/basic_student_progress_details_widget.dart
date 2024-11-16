@@ -21,10 +21,10 @@ class BasicStudentProgressDetailsWidget extends StatefulWidget {
 
   @override
   State<BasicStudentProgressDetailsWidget> createState() =>
-      _StudentDetailsWidgetState();
+      _BasicStudentDetailsWidgetState();
 }
 
-class _StudentDetailsWidgetState extends State<BasicStudentProgressDetailsWidget> {
+class _BasicStudentDetailsWidgetState extends State<BasicStudentProgressDetailsWidget> {
   // Helper method to determine color based on difficulty
   Color _getDifficultyColor(String difficulty) {
     switch (difficulty.toLowerCase()) {

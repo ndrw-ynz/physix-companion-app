@@ -30,6 +30,9 @@ abstract class TeacherStudentProgressController
 
   Future<void> _fetchAllStudents() async {
     try {
+      // Fetch lesson attempts before filtering students
+      await _fetchLessonAttempts();
+
       if (teacherSectionIds.isNotEmpty) {
         QuerySnapshot snapshot = await FirebaseFirestore.instance
             .collection('students')
@@ -38,15 +41,20 @@ abstract class TeacherStudentProgressController
 
         setState(() {
           studentList = snapshot.docs.map((doc) {
+            final data = doc.data() as Map<String, dynamic>;
+
             return {
               'id': doc.id,
-              ...doc.data() as Map<String, dynamic>,
+              ...data,
+              'lessonNumber': data['lessonNumber'] is String
+                  ? int.tryParse(data['lessonNumber']) ?? 0
+                  : (data['lessonNumber'] ?? 0),
             };
           }).toList();
         });
 
         filteredList = List.from(studentList);
-        _filterStudentSearch(); // Initial filtering for search input
+        _filterStudentSearch();
       } else {
         print("No sections found for the current teacher.");
       }
@@ -69,19 +77,14 @@ abstract class TeacherStudentProgressController
         bool matchesSection = selectedSection == null ||
             sectionIdToName[sectionId] == selectedSection;
 
-        // Filter based on lesson attempts
-        bool matchesLessonAttempts = true;
-        if (selectedLessonNumber != null) {
-          matchesLessonAttempts = lessonAttempts.any((attempt) {
-            return attempt['studentId'] == student['uid'] &&
-                (selectedDifficulty == null ||
-                    attempt['difficulty']
-                        .toString()
-                        .toLowerCase() == selectedDifficulty!.toLowerCase());
-          });
-        }
+        // Check for "Accomplished" based on the main `isAccomplished`
+        bool isAccomplishedTopLevel = lessonAttempts.any((attempt) {
+          return attempt['studentId'] == student['id'] &&
+              attempt['isAccomplished'] == true; // Check top-level isAccomplished
+        });
 
-        return matchesSearch && matchesSection && matchesLessonAttempts;
+        // Combine all filters: Search, Section, and Accomplishment Status
+        return matchesSearch && matchesSection && isAccomplishedTopLevel;
       }).toList();
     });
   }
@@ -139,7 +142,7 @@ abstract class TeacherStudentProgressController
     try {
       QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection(collectionName)
-          .where('difficulty', isNotEqualTo: null) // Ensure difficulty is present
+          .where('difficulty', isNotEqualTo: null)
           .get();
 
       setState(() {
@@ -151,9 +154,9 @@ abstract class TeacherStudentProgressController
         }).toList();
       });
 
-      _filterStudentSearch();
+      _filterStudentSearch();  // Reapply the search filter after fetching attempts
     } catch (e) {
-      print("Error fetching lesson attempts: $e");
+      print("Error fetching lesson attempts from $collectionName: $e");
     }
   }
 
