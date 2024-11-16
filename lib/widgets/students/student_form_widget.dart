@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -269,25 +268,52 @@ abstract class StudentFormController extends State<StudentFormWidget> {
 
   Future<void> _addStudentAccount() async {
     try {
-      // Manually create a new student document in Firestore without Firebase Authentication
-      String uid = generateUID(); // Generate a unique ID using the custom function
+      // Save current teacher credentials before adding a student
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser == null) {
+        print("Error: No teacher currently logged in.");
+        return;
+      }
+
+      // Fetch the teacher's email and password
+      String teacherEmail = currentUser.email!;
+      String teacherPassword = await _getTeacherPassword(currentUser.uid);
+
+      // Create the student account
+      UserCredential studentCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: extractUsername(_emailController.text.trim()),  // Example username-based password generator
+      );
+
+      String studentUid = studentCredential.user!.uid;
 
       // Save student data in Firestore
-      await FirebaseFirestore.instance.collection('students').doc(uid).set({
-        'uid': uid,
+      await FirebaseFirestore.instance.collection('students').doc(studentUid).set({
+        'uid': studentUid,
         'email': _emailController.text.trim(),
         'firstName': _firstNameController.text.trim(),
         'lastName': _lastNameController.text.trim(),
         'username': _emailController.text.trim(),
-        'password': extractUsername(_emailController.text.trim()),  // DO NOT store plain passwords! Use hashing
+        'password': extractUsername(_emailController.text.trim()), // DO NOT store plain passwords
         'dateCreated': FieldValue.serverTimestamp(),
         'sectionId': selectedSectionId,
       });
+
       print("Student account created successfully!");
+
+      // Re-login the teacher
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: teacherEmail,
+        password: teacherPassword,
+      );
+
+      print("Teacher re-logged in successfully!");
     } catch (e) {
-      print("Error creating student account: $e");
+      print("Error adding student or re-logging teacher: $e");
     }
   }
+
+
 
   Future<void> _editStudentAccount() async {
     if (widget.uid == null) {
@@ -332,13 +358,18 @@ abstract class StudentFormController extends State<StudentFormWidget> {
     );
   }
 
-  String generateUID() {
-    const String chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    Random random = Random();
-    String uid = '';
-    for (int i = 0; i < 28; i++) { // 22 characters long, similar to the example UIDs
-      uid += chars[random.nextInt(chars.length)];
+  Future<String> _getTeacherPassword(String uid) async {
+    try {
+      DocumentSnapshot teacherDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      if (teacherDoc.exists) {
+        return teacherDoc.get('password'); // Assumes password is stored in plaintext
+      } else {
+        throw Exception("Teacher document does not exist.");
+      }
+    } catch (e) {
+      print("Error fetching teacher password: $e");
+      throw Exception("Unable to fetch teacher password.");
     }
-    return uid;
   }
 }
+

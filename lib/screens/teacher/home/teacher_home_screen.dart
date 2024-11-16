@@ -49,8 +49,8 @@ class _TeacherHomeScreenState extends TeacherHomeController {
             ),
             ListTile(
               leading: const Icon(Icons.book_outlined),
-              title: const Text('Section Progress'),
-              onTap: () => {},
+              title: const Text("My Student's Progress"),
+              onTap: () => context.push("/teacher_home/student_progress"),
             ),
             ListTile(
               leading: const Icon(Icons.lock_reset),

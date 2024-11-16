@@ -16,6 +16,7 @@ import 'screens/teacher/home/teacher_home_screen.dart';
 import 'screens/teacher/login/teacher_forgot_password_screen.dart';
 import 'screens/teacher/login/teacher_login_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/teacher/student_progress/teacher_student_progress_screen.dart';
 import 'screens/teacher/students/teacher_student_add_screen.dart';
 import 'screens/teacher/students/teacher_student_view_screen.dart';
 import 'widgets/sections/section_form_widget.dart';
@@ -148,6 +149,9 @@ final _router = GoRouter(
                         );
                       })
                 ]),
+            GoRoute(
+                path: "student_progress",
+                builder: (context, state) => TeacherStudentProgressScreen()),
             GoRoute(
                 path: "change_password",
                 builder: (context, state) => TeacherChangePasswordScreen())
