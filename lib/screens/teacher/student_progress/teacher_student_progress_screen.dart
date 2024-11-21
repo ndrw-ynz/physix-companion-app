@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:physix_companion_app/widgets/students/basic_student_progress_details_widget.dart';
 
-
 part "teacher_student_progress_controller.dart";
 
 class TeacherStudentProgressScreen extends StatefulWidget {
@@ -95,8 +94,7 @@ class _TeacherStudentProgressScreenState extends TeacherStudentProgressControlle
                               value: selectedSection,
                               icon: const Icon(Icons.arrow_downward),
                               elevation: 16,
-                              items: sections.map<DropdownMenuItem<String>>((
-                                  String section) {
+                              items: sections.map<DropdownMenuItem<String>>((String section) {
                                 return DropdownMenuItem<String>(
                                   value: section,
                                   child: Text(section),
@@ -213,20 +211,33 @@ class _TeacherStudentProgressScreenState extends TeacherStudentProgressControlle
                       }
                     }
 
-                    // Return the widget for each student
-                    return BasicStudentProgressDetailsWidget(
-                      itemNumber: index + 1,
-                      lastName: student_progress["lastName"] ?? "None",
-                      firstName: student_progress["firstName"] ?? "None",
-                      difficulty: difficulty,
-                      lessonNumber: lessonNumber,
-                      isAccomplished: isAccomplished,  // Show accomplished status
+                    // Return the widget for each student with an onTap to navigate
+                    return GestureDetector(
+                      onTap: () {
+                        context.go(
+                          '/teacher_home/student_progress/attempts',
+                          extra: {
+                            'studentId': student_progress['id'],  // Pass student ID
+                            'firstName': student_progress['firstName'],  // Pass student's first name
+                            'lastName': student_progress['lastName'],  // Pass student's last name
+                            'lessonNumber': lessonNumber,  // Pass the lesson number
+                            'difficulty': difficulty,  // Pass the difficulty level
+                          },
+                        );
+                      },
+
+                      child: BasicStudentProgressDetailsWidget(
+                        itemNumber: index + 1,
+                        lastName: student_progress["lastName"] ?? "None",
+                        firstName: student_progress["firstName"] ?? "None",
+                        difficulty: difficulty,
+                        lessonNumber: lessonNumber,
+                        isAccomplished: isAccomplished,  // Show accomplished status
+                      ),
                     );
                   },
                 ),
               )
-
-
             ],
           ),
         ),
