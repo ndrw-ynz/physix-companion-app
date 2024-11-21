@@ -23,7 +23,7 @@ class _TeacherHomeScreenState extends TeacherHomeController {
         elevation: 0,
         backgroundColor: Colors.white,
         shape: const Border(
-          bottom: BorderSide(color: Colors.black, width: 2.0), // Black outline
+          bottom: BorderSide(color: Colors.black, width: 2.0),
         ),
       ),
       drawer: Drawer(
@@ -68,60 +68,77 @@ class _TeacherHomeScreenState extends TeacherHomeController {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 42.0),
-          child: sectionsWithCounts.isEmpty
-              ? const Center(child: CircularProgressIndicator()) // Loading indicator
-              : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                "Sections Handled",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(color: Colors.black, width: 1.5),
-                ),
-                child: DataTable(
-                  columnSpacing: 20,
-                  columns: const [
-                    DataColumn(
-                      label: Text(
-                        "Section Name",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
+          child: StreamBuilder<List<Map<String, dynamic>>>(
+            stream: getSectionsWithStudentCounts(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
+
+              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(child: Text("No sections found"));
+              }
+
+              List<Map<String, dynamic>> sectionsWithCounts = snapshot.data!;
+
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Sections Handled",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
-                    DataColumn(
-                      label: Text(
-                        "Student Count",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: Colors.black, width: 1.5),
                     ),
-                  ],
-                  rows: sectionsWithCounts.map((sectionData) {
-                    return DataRow(
-                      cells: [
-                        DataCell(Text(sectionData['sectionName'])),
-                        DataCell(
-                            Text(sectionData['studentCount'].toString())),
+                    child: DataTable(
+                      columnSpacing: 20,
+                      columns: const [
+                        DataColumn(
+                          label: Text(
+                            "Section Name",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            "Student Count",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       ],
-                    );
-                  }).toList(),
-                ),
-              ),
-            ],
+                      rows: sectionsWithCounts.map((sectionData) {
+                        return DataRow(
+                          cells: [
+                            DataCell(Text(sectionData['sectionName'])),
+                            DataCell(Text(sectionData['studentCount'].toString())),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
     );
   }
 }
+

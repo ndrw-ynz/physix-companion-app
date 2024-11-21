@@ -2,13 +2,14 @@ part of "teacher_home_screen.dart";
 
 abstract class TeacherHomeController extends State<TeacherHomeScreen> {
   String? teacherDisplayName;
-  List<Map<String, dynamic>> sectionsWithCounts = []; // Holds section name and student count
+  List<Map<String, dynamic>> sectionsWithCounts = [
+  ]; // Holds section name and student count
 
   @override
   void initState() {
     super.initState();
     updateTeacherDisplay();
-    fetchSectionsWithStudentCounts();
+    getSectionsWithStudentCounts();
   }
 
   Future<void> updateTeacherDisplay() async {
@@ -16,7 +17,8 @@ abstract class TeacherHomeController extends State<TeacherHomeScreen> {
 
     if (teacherProfile != null) {
       setState(() {
-        teacherDisplayName = "${teacherProfile["firstName"]} ${teacherProfile["lastName"]}";
+        teacherDisplayName =
+        "${teacherProfile["firstName"]} ${teacherProfile["lastName"]}";
       });
     }
   }
@@ -31,18 +33,18 @@ abstract class TeacherHomeController extends State<TeacherHomeScreen> {
     }
   }
 
-  Future<void> fetchSectionsWithStudentCounts() async {
+  Stream<List<Map<String, dynamic>>> getSectionsWithStudentCounts() {
     String? teacherId = FirebaseAuth.instance.currentUser?.uid;
 
-    if (teacherId == null) return;
+    if (teacherId == null) {
+      return Stream.value([]);
+    }
 
-    try {
-      QuerySnapshot sectionSnapshot = await FirebaseFirestore.instance
-          .collection('sections')
-          .where('teacherId', isEqualTo: teacherId)
-          .get();
-
-      // Loop through sections and count students for each section
+    return FirebaseFirestore.instance
+        .collection('sections')
+        .where('teacherId', isEqualTo: teacherId)
+        .snapshots()
+        .asyncMap((sectionSnapshot) async {
       List<Map<String, dynamic>> sectionDataList = [];
 
       for (var sectionDoc in sectionSnapshot.docs) {
@@ -57,20 +59,13 @@ abstract class TeacherHomeController extends State<TeacherHomeScreen> {
 
         int studentCount = studentSnapshot.docs.length;
 
-        // Add the section name and student count to the list
         sectionDataList.add({
           'sectionName': sectionName,
           'studentCount': studentCount,
         });
       }
 
-      setState(() {
-        sectionsWithCounts = sectionDataList;
-      });
-
-      print("Sections with counts: $sectionsWithCounts");
-    } catch (e) {
-      print("Error fetching sections with student counts: $e");
-    }
+      return sectionDataList;
+    });
   }
 }
