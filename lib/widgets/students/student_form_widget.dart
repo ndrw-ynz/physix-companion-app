@@ -16,14 +16,14 @@ class StudentFormWidget extends StatefulWidget {
         this.lastName,
         this.email,
         this.sectionId,
-        required this.dateRegistered});
+        this.dateCreated});
   final FormMode formMode;
   final String? uid;
   final String? firstName;
   final String? lastName;
   final String? email;
   final String? sectionId;
-  final Timestamp dateRegistered;
+  final Timestamp? dateCreated;
 
   @override
   State<StudentFormWidget> createState() => _StudentFormWidgetState();
@@ -178,24 +178,45 @@ abstract class StudentFormController extends State<StudentFormWidget> {
 
   String? selectedSectionId;
   List<DropdownMenuItem<String>> dropdownSectionItems = [];
+  String? studentUid;
+
 
   @override
   void initState() {
     super.initState();
+
+    // Print uid to track its value
+    studentUid = widget.uid;
+    print("Initial UID: ${widget.uid}");
+
+    // Initialize the date controller with the current date
     _dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
     _fetchAllSections();
 
     if (widget.formMode == FormMode.edit) {
+      // Ensure the uid isn't getting changed unintentionally
+      print("Editing student with UID: ${widget.uid}");
+
       // Initialize with existing data if in edit mode
       _firstNameController.text = widget.firstName ?? '';
       _lastNameController.text = widget.lastName ?? '';
       _emailController.text = widget.email ?? '';
       selectedSectionId = widget.sectionId;
-      _dateController.text = formatTimestamp(widget.dateRegistered);
+
+      // Safely format dateCreated (now nullable)
+      if (widget.dateCreated != null) {
+        _dateController.text = formatTimestamp(widget.dateCreated!);
+      } else {
+        _dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      }
     } else {
-      _dateController.text = formatTimestamp(Timestamp.now());
+      // For add mode, ensure the date is set properly and uid remains constant
+      _dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
     }
   }
+
+
 
   Future<void> _fetchAllSections() async {
     try {
@@ -316,26 +337,81 @@ abstract class StudentFormController extends State<StudentFormWidget> {
 
 
   Future<void> _editStudentAccount() async {
-    if (widget.uid == null) {
-      print("Error: No student uid provided");
+    if (studentUid == null) {
+      print("Error: No student UID provided");
       return;
     }
+
+    // Store teacher's credentials
+    User? currentTeacher = FirebaseAuth.instance.currentUser;
+    if (currentTeacher == null) {
+      print("Error: No teacher currently logged in.");
+      return;
+    }
+
+    String teacherEmail = currentTeacher.email!;
+    String teacherPassword;
     try {
+      teacherPassword = await _getTeacherPassword(currentTeacher.uid); // Retrieve the teacher's password
+    } catch (e) {
+      print("Error fetching teacher password: $e");
+      return;
+    }
+
+    try {
+      // Fetch current student data from Firestore
+      DocumentSnapshot studentDoc = await FirebaseFirestore.instance
+          .collection('students')
+          .doc(studentUid)
+          .get();
+
+      if (!studentDoc.exists) {
+        print("Error: Student document does not exist.");
+        return;
+      }
+      String currentEmail = studentDoc.get('email');
+      String studentPassword = studentDoc.get('password'); // Fetch stored password
+
+      // Re-authenticate the student using their current credentials
+      UserCredential studentCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: currentEmail, password: studentPassword);
+
+      User? studentUser = studentCredential.user;
+      if (studentUser == null) {
+        print("Error: Unable to fetch student user.");
+        return;
+      }
+
+      // Update email in Firebase Authentication
+      await studentUser.updateEmail(_emailController.text.trim());
+      print("Email updated in Firebase Auth!");
+
+      // Update Firestore with the new email and new dateCreated
       await FirebaseFirestore.instance
           .collection('students')
-          .doc(widget.uid)
+          .doc(studentUid)
           .update({
         'email': _emailController.text.trim(),
         'firstName': _firstNameController.text.trim(),
         'lastName': _lastNameController.text.trim(),
-        'username': _emailController.text.trim(),
         'sectionId': selectedSectionId!,
+        'dateCreated': FieldValue.serverTimestamp(), // Set the current timestamp when edited
       });
-      print("Student account updated successfully!");
+      print("Student account updated successfully in Firestore!");
+
+      // Re-login as the teacher to maintain session
+      await FirebaseAuth.instance.signOut(); // Ensure a clean sign-in process
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: teacherEmail,
+        password: teacherPassword,
+      );
+      print("Teacher re-logged in successfully!");
+
     } catch (e) {
-      print("Error updating student account: $e");
+      print("Error editing student account: $e");
     }
   }
+
 
 
   void _showSuccessDialog(BuildContext context) {

@@ -146,7 +146,7 @@ final _router = GoRouter(
                           lastName: extras?['lastName'],
                           email: extras?['email'],
                           sectionId: extras?['sectionId'],
-                          dateRegistered: extras?['dateRegistered'],
+                          dateCreated: extras?['dateCreated'],
                         );
                       })
                 ]),

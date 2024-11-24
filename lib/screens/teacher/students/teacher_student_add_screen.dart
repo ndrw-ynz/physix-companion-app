@@ -18,7 +18,7 @@ class _TeacherStudentAddScreenState extends State<TeacherStudentAddScreen> {
   Widget build(BuildContext context) {
     return StudentFormWidget(
       formMode: FormMode.add,
-      dateRegistered: Timestamp.now(),
+      dateCreated: Timestamp.now(),
     );
   }
 }

@@ -131,7 +131,7 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                       password: student['password'] ?? 'Unknown Password',
                       sectionId: student['sectionId'] ?? 'Unknown Section ID',
                       sectionName: student['sectionName'] ?? 'Unknown Section Name',
-                      dateRegistered: student['dateCreated'] ?? Timestamp.now(),
+                      dateCreated: student['dateCreated'] ?? Timestamp.now(),
                     );
                   },
                 ),

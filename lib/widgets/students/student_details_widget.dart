@@ -16,7 +16,7 @@ class StudentDetailsWidget extends StatefulWidget {
       required this.password,
       required this.sectionId,
       required this.sectionName,
-      required this.dateRegistered});
+      required this.dateCreated});
 
   final int itemNumber;
   final String uid;
@@ -27,7 +27,7 @@ class StudentDetailsWidget extends StatefulWidget {
   final String password;
   final String sectionId;
   final String sectionName;
-  final Timestamp dateRegistered;
+  final Timestamp dateCreated;
 
   @override
   State<StudentDetailsWidget> createState() => _StudentDetailsWidgetState();
@@ -75,17 +75,9 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
                           "lastName": widget.lastName,
                           "email": widget.email,
                           "sectionId": widget.sectionId,
-                          "dateRegistered": widget.dateRegistered,
+                          "dateCreated": widget.dateCreated,
                         }),
                         icon: const Icon(Icons.edit),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                      ),
-                      const SizedBox(width: 10), // Space between buttons
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.delete),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                         ),
@@ -144,7 +136,7 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
                         const Text("Date Registered:",
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         const SizedBox(width: 10),
-                        Text(formatTimestamp(widget.dateRegistered)),
+                        Text(formatTimestamp(widget.dateCreated)),
                       ])
                     ],
                   ))
