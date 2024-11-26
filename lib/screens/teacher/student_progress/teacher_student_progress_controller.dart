@@ -83,8 +83,14 @@ abstract class TeacherStudentProgressController
               attempt['isAccomplished'] == true; // Check top-level isAccomplished
         });
 
+        // Check student status - only show if status is true
+        bool hasValidStatus = student['status'] == true;
+
         // Combine all filters: Search, Section, and Accomplishment Status
-        return matchesSearch && matchesSection && isAccomplishedTopLevel;
+        return matchesSearch
+            && matchesSection
+            && isAccomplishedTopLevel
+            && hasValidStatus;
       }).toList();
     });
   }
