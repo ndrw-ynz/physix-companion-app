@@ -66,9 +66,20 @@ abstract class TeacherStudentViewController
             sectionIdToName[sectionId] == selectedSection;
         return matchesSection;
       }).toList();
+
+      filteredList.sort((a, b) {
+        // Get status values, default to false if null
+        bool statusA = a['status'] ?? false;
+        bool statusB = b['status'] ?? false;
+
+        // Compare status values (true comes before false)
+        if (statusA == statusB) {
+          return 0; // Keep original order if status is the same
+        }
+        return statusA ? -1 : 1; // True values come first
+      });
     });
   }
-
   Future<void> _gatherSections() async {
     Set<String> uniqueSections = {}; // Set to hold unique section names
     Map<String, String> sectionIdToNameMap = {

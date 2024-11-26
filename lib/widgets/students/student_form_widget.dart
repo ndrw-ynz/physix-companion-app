@@ -16,7 +16,8 @@ class StudentFormWidget extends StatefulWidget {
         this.lastName,
         this.email,
         this.sectionId,
-        this.dateCreated});
+        this.dateCreated,
+        this.status});
   final FormMode formMode;
   final String? uid;
   final String? firstName;
@@ -24,6 +25,7 @@ class StudentFormWidget extends StatefulWidget {
   final String? email;
   final String? sectionId;
   final Timestamp? dateCreated;
+  final bool? status;
 
   @override
   State<StudentFormWidget> createState() => _StudentFormWidgetState();
@@ -164,6 +166,75 @@ class _StudentFormWidgetState extends StudentFormController {
                         ),
                         const SizedBox(height: 20),
                         const Text(
+                          "Status",
+                          style: TextStyle(fontSize: 16.0),
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    studentStatus = true;
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  decoration: BoxDecoration(
+                                    color: studentStatus == true
+                                        ? Colors.green
+                                        : Colors.white,
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Active',
+                                      style: TextStyle(
+                                        color: studentStatus == true
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    studentStatus = false;
+                                  });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 10),
+                                  decoration: BoxDecoration(
+                                    color: studentStatus == false
+                                        ? Colors.red
+                                        : Colors.white,
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Inactive',
+                                      style: TextStyle(
+                                        color: studentStatus == false
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        const Text(
                           "Username and Password are auto-generated*",
                           style: TextStyle(
                               fontSize: 12.0,
@@ -202,6 +273,7 @@ abstract class StudentFormController extends State<StudentFormWidget> {
   String? selectedSectionId;
   List<DropdownMenuItem<String>> dropdownSectionItems = [];
   String? studentUid;
+  bool? studentStatus;
 
 
   @override
@@ -226,6 +298,7 @@ abstract class StudentFormController extends State<StudentFormWidget> {
       _lastNameController.text = widget.lastName ?? '';
       _emailController.text = widget.email ?? '';
       selectedSectionId = widget.sectionId;
+      studentStatus = widget.status;
 
       // Safely format dateCreated (now nullable)
       if (widget.dateCreated != null) {
@@ -236,6 +309,7 @@ abstract class StudentFormController extends State<StudentFormWidget> {
     } else {
       // For add mode, ensure the date is set properly and uid remains constant
       _dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      studentStatus = true;
     }
   }
 
@@ -353,6 +427,7 @@ abstract class StudentFormController extends State<StudentFormWidget> {
         'password': extractUsername(_emailController.text.trim()), // DO NOT store plain passwords
         'dateCreated': FieldValue.serverTimestamp(),
         'sectionId': selectedSectionId,
+        'status': studentStatus ?? true,
       });
 
       print("Student account created successfully!");
@@ -431,6 +506,7 @@ abstract class StudentFormController extends State<StudentFormWidget> {
         'lastName': _lastNameController.text.trim(),
         'sectionId': selectedSectionId!,
         'dateCreated': FieldValue.serverTimestamp(), // Set the current timestamp when edited
+        'status': studentStatus ?? true,
       });
       print("Student account updated successfully in Firestore!");
 

@@ -132,6 +132,7 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                       sectionId: student['sectionId'] ?? 'Unknown Section ID',  // you can keep this
                       sectionName: sectionIdToName[student['sectionId']] ?? 'Unknown Section Name',  // modified this line
                       dateCreated: student['dateCreated'] ?? Timestamp.now(),
+                      status: student['status'] ?? false,
                     );
                   },
                 ),
