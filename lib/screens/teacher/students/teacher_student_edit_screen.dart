@@ -3,21 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:physix_companion_app/commons.dart';
 import 'package:physix_companion_app/widgets/students/student_form_widget.dart';
 
-part 'teacher_student_add_controller.dart';
-
-class TeacherStudentAddScreen extends StatefulWidget {
-  const TeacherStudentAddScreen({super.key});
+class TeacherStudentEditScreen extends StatefulWidget {
+  final String studentId;
+  const TeacherStudentEditScreen({super.key, required this.studentId});
 
   @override
-  State<TeacherStudentAddScreen> createState() =>
-      _TeacherStudentAddScreenState();
+  State<TeacherStudentEditScreen> createState() =>
+      _TeacherStudentEditScreenState();
 }
 
-class _TeacherStudentAddScreenState extends State<TeacherStudentAddScreen> {
+class _TeacherStudentEditScreenState extends State<TeacherStudentEditScreen> {
   @override
   Widget build(BuildContext context) {
     return StudentFormWidget(
-      formMode: FormMode.add,
+      formMode: FormMode.edit,
       dateCreated: Timestamp.now(),
     );
   }

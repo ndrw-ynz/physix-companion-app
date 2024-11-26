@@ -7,7 +7,8 @@ import '../../utils.dart';
 class StudentDetailsWidget extends StatefulWidget {
   const StudentDetailsWidget(
       {super.key,
-      required this.studentId,
+      required this.itemNumber,
+      required this.uid,
       required this.lastName,
       required this.firstName,
       required this.email,
@@ -15,8 +16,11 @@ class StudentDetailsWidget extends StatefulWidget {
       required this.password,
       required this.sectionId,
       required this.sectionName,
-      required this.dateRegistered});
-  final String studentId;
+      required this.dateCreated,
+      this.status});
+
+  final int itemNumber;
+  final String uid;
   final String lastName;
   final String firstName;
   final String email;
@@ -24,7 +28,8 @@ class StudentDetailsWidget extends StatefulWidget {
   final String password;
   final String sectionId;
   final String sectionName;
-  final Timestamp dateRegistered;
+  final Timestamp dateCreated;
+  final bool? status;
 
   @override
   State<StudentDetailsWidget> createState() => _StudentDetailsWidgetState();
@@ -35,7 +40,6 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
   Widget build(BuildContext context) {
     return Container(
         margin: const EdgeInsets.all(20.0),
-        height: 200,
         decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 2.0),
             borderRadius: BorderRadius.circular(10.0)),
@@ -43,19 +47,54 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              const SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      // Space between texts
-                      const SizedBox(width: 25),
-                      Text("${widget.lastName}, ${widget.firstName}",
-                          style: const TextStyle(
-                              fontSize: 16.0,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold)),
+                      Row(
+                        children: <Widget>[
+                          const SizedBox(width: 10),
+                          Container(
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: (widget.status ?? false) ? Colors.green : Colors.red,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            (widget.status ?? false) ? "Active" : "Inactive",
+                            style: TextStyle(
+                              color: (widget.status ?? false) ? Colors.green : Colors.red,
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                      // Second Row: Item Number and Name
+                      Row(
+                        children: <Widget>[
+                          const SizedBox(width: 10),
+                          Text(
+                              "${widget.itemNumber}. ",
+                              style: const TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold)
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                              "${widget.lastName}, ${widget.firstName}",
+                              style: const TextStyle(
+                                  fontSize: 18.0,
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.bold
+                              )
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                   // Right side: Two Buttons
@@ -64,22 +103,15 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
                       IconButton(
                         onPressed: () =>
                             context.push("/teacher_home/students/edit", extra: {
-                          "id": widget.studentId,
-                          "firstName": widget.firstName,
-                          "lastName": widget.lastName,
-                          "email": widget.email,
-                          "sectionId": widget.sectionId,
-                          "dateRegistered": widget.dateRegistered,
-                        }),
+                              "uid": widget.uid,
+                              "firstName": widget.firstName,
+                              "lastName": widget.lastName,
+                              "email": widget.email,
+                              "sectionId": widget.sectionId,
+                              "dateCreated": widget.dateCreated,
+                              "status": widget.status ?? false,
+                            }),
                         icon: const Icon(Icons.edit),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                      ),
-                      const SizedBox(width: 10), // Space between buttons
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.delete),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                         ),
@@ -138,10 +170,12 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
                         const Text("Date Registered:",
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         const SizedBox(width: 10),
-                        Text(formatTimestamp(widget.dateRegistered)),
+                        Text(formatTimestamp(widget.dateCreated)),
                       ])
                     ],
                   ))
-            ]));
+            ]
+        )
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -52,7 +53,7 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextField(
-                      controller: _teacherQueryController,
+                      controller: _studentQueryController,
                       decoration: InputDecoration(
                         hintText: "Search Student's Name",
                         hintStyle: const TextStyle(
@@ -65,7 +66,13 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.search),
                           onPressed: () {
-                            setState(() {});
+                            setState(() {
+                              if (_studentQueryController.text.isEmpty){
+                                _fetchAllStudents();
+                              } else {
+                                _filterStudentSearch();
+                              }
+                            });
                           },
                         ),
                         filled: true,
@@ -83,7 +90,7 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                         value: selectedSection,
                         icon: const Icon(Icons.arrow_downward),
                         elevation: 16,
-                        items: years
+                        items: sections
                             .map<DropdownMenuItem<String>>((String section) {
                           return DropdownMenuItem<String>(
                             value: section,
@@ -109,35 +116,27 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                 ),
               ),
               const SizedBox(height: 20.0),
-              StudentDetailsWidget(
-                studentId: "lol",
-                lastName: "mario",
-                firstName: "juan",
-                email: "dummy@gmail.com",
-                username: "meok",
-                password: "hello",
-                sectionId: "some",
-                sectionName: "9201",
-                dateRegistered: Timestamp.now(),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    final student = filteredList[index];
+                    return StudentDetailsWidget(
+                      itemNumber: index + 1,
+                      uid: student["uid"] ?? "Unknown ID",
+                      lastName: student["lastName"] ?? "None",
+                      firstName: student["firstName"] ?? "None",
+                      email: student['email'] ?? 'Unknown Email',
+                      username: student['username'] ?? 'Unknown Username',
+                      password: student['password'] ?? 'Unknown Password',
+                      sectionId: student['sectionId'] ?? 'Unknown Section ID',  // you can keep this
+                      sectionName: sectionIdToName[student['sectionId']] ?? 'Unknown Section Name',  // modified this line
+                      dateCreated: student['dateCreated'] ?? Timestamp.now(),
+                      status: student['status'] ?? false,
+                    );
+                  },
+                ),
               )
-              // Expanded(
-              //   child: ListView.builder(
-              //     itemCount: filteredList.length,
-              //     itemBuilder: (context, index) {
-              //       final teacher = filteredList[index];
-              //       return TeacherDetailsWidget(
-              //         itemNumber: index + 1,
-              //         uid: teacher["uid"],
-              //         lastName: teacher["lastName"] ?? "None",
-              //         firstName: teacher["firstName"] ?? "None",
-              //         email: teacher['email'] ?? 'Unknown Email',
-              //         username: teacher['username'] ?? 'Unknown Username',
-              //         password: teacher['password'] ?? 'Unknown Password',
-              //         dateRegistered: teacher['dateCreated'] ?? Timestamp.now(),
-              //       );
-              //     },
-              //   ),
-              // ),
             ],
           ),
         ),

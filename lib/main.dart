@@ -16,6 +16,8 @@ import 'screens/teacher/home/teacher_home_screen.dart';
 import 'screens/teacher/login/teacher_forgot_password_screen.dart';
 import 'screens/teacher/login/teacher_login_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/teacher/student_progress/student_attempts_details_screen.dart';
+import 'screens/teacher/student_progress/teacher_student_progress_screen.dart';
 import 'screens/teacher/students/teacher_student_add_screen.dart';
 import 'screens/teacher/students/teacher_student_view_screen.dart';
 import 'widgets/sections/section_form_widget.dart';
@@ -139,15 +141,35 @@ final _router = GoRouter(
 
                         return StudentFormWidget(
                           formMode: FormMode.edit,
-                          id: extras?['id'],
+                          uid: extras?['uid'],
                           firstName: extras?['firstName'],
                           lastName: extras?['lastName'],
                           email: extras?['email'],
                           sectionId: extras?['sectionId'],
-                          dateRegistered: extras?['dateRegistered'],
+                          dateCreated: extras?['dateCreated'],
+                          status: extras?['status'],
                         );
                       })
                 ]),
+            GoRoute(
+                path: "student_progress",
+                builder: (context, state) => TeacherStudentProgressScreen(),
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: "attempts",
+                    builder: (context, state) {
+                      final extra = state.extra as Map<String, dynamic>;
+                      return StudentAttemptDetailsScreen(
+                        studentId: extra['studentId'],
+                        firstName: extra['firstName'],
+                        lastName:  extra['lastName'],
+                        lessonNumber: extra['lessonNumber'],
+                        difficulty: extra['difficulty'],
+                      );
+                    },
+                  ),
+                ]
+            ),
             GoRoute(
                 path: "change_password",
                 builder: (context, state) => TeacherChangePasswordScreen())
