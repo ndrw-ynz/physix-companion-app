@@ -102,7 +102,30 @@ class _StudentFormWidgetState extends StudentFormController {
                             filled: true,
                             fillColor: Colors.white,
                             border: OutlineInputBorder(),
+                            // Add helper text to show the requirement
+                            helperText: 'Username must be at least 6 characters before @',
                           ),
+                          // Add validation
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Email is required';
+                            }
+
+                            // Check if email contains @ and validate username length
+                            int atIndex = value.indexOf('@');
+                            if (atIndex == -1) {
+                              return 'Invalid email format';
+                            }
+
+                            String username = value.substring(0, atIndex);
+                            if (username.length < 6) {
+                              return 'Username must be at least 6 characters';
+                            }
+
+                            return null;
+                          },
+                          // Enable auto-validation
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                         ),
                         const SizedBox(height: 20),
                         const Text(
@@ -255,6 +278,18 @@ abstract class StudentFormController extends State<StudentFormWidget> {
   }
 
   void _showConfirmationDialog(BuildContext context, String studentName) {
+    // Validate email before showing confirmation
+    String email = _emailController.text;
+    int atIndex = email.indexOf('@');
+    if (atIndex < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Username in email must be at least 6 characters long'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
     showDialog(
       context: context,
       builder: (BuildContext context) {
