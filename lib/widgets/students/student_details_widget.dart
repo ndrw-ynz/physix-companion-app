@@ -129,7 +129,7 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(width: 10),
-                        Text("${widget.sectionId}"),
+                        Text("${widget.sectionName}"),
                       ]),
                       const SizedBox(width: 10),
                       Row(children: <Widget>[
