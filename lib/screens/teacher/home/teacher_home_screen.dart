@@ -126,7 +126,8 @@ class _TeacherHomeScreenState extends TeacherHomeController {
                         return DataRow(
                           cells: [
                             DataCell(Text(sectionData['sectionName'])),
-                            DataCell(Text(sectionData['studentCount'].toString())),
+                            DataCell(
+                                Text(sectionData['studentCount'].toString())),
                           ],
                         );
                       }).toList(),
@@ -141,4 +142,3 @@ class _TeacherHomeScreenState extends TeacherHomeController {
     );
   }
 }
-
