@@ -37,8 +37,7 @@ abstract class AdminSectionsViewController
 
       if (teacherIds.isNotEmpty) {
         QuerySnapshot teacherSnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .where('role', isEqualTo: 'teacher')
+            .collection('teachers')
             .where(FieldPath.documentId, whereIn: teacherIds.toList())
             .get();
 

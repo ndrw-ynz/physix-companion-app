@@ -28,10 +28,8 @@ abstract class AdminHomeController extends State<AdminHomeScreen> {
 
   Future<void> _fetchTeacherCount() async {
     try {
-      QuerySnapshot teacherSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .where('role', isEqualTo: 'teacher')
-          .get();
+      QuerySnapshot teacherSnapshot =
+          await FirebaseFirestore.instance.collection('teachers').get();
 
       setState(() {
         teacherCount = teacherSnapshot.docs.length;
