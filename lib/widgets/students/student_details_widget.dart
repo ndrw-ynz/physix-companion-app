@@ -13,7 +13,6 @@ class StudentDetailsWidget extends StatefulWidget {
       required this.firstName,
       required this.email,
       required this.username,
-      required this.password,
       required this.sectionId,
       required this.sectionName,
       required this.dateCreated,
@@ -25,7 +24,6 @@ class StudentDetailsWidget extends StatefulWidget {
   final String firstName;
   final String email;
   final String username;
-  final String password;
   final String sectionId;
   final String sectionName;
   final Timestamp dateCreated;
@@ -63,14 +61,18 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
                             height: 12,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: (widget.status ?? false) ? Colors.green : Colors.red,
+                              color: (widget.status ?? false)
+                                  ? Colors.green
+                                  : Colors.red,
                             ),
                           ),
                           const SizedBox(width: 5),
                           Text(
                             (widget.status ?? false) ? "Active" : "Inactive",
                             style: TextStyle(
-                              color: (widget.status ?? false) ? Colors.green : Colors.red,
+                              color: (widget.status ?? false)
+                                  ? Colors.green
+                                  : Colors.red,
                               fontSize: 14.0,
                             ),
                           ),
@@ -80,19 +82,15 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
                       Row(
                         children: <Widget>[
                           const SizedBox(width: 10),
-                          Text(
-                              "${widget.itemNumber}. ",
-                              style: const TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold)
-                          ),
+                          Text("${widget.itemNumber}. ",
+                              style: const TextStyle(
+                                  fontSize: 22.0, fontWeight: FontWeight.bold)),
                           const SizedBox(width: 10),
-                          Text(
-                              "${widget.lastName}, ${widget.firstName}",
+                          Text("${widget.lastName}, ${widget.firstName}",
                               style: const TextStyle(
                                   fontSize: 18.0,
                                   fontStyle: FontStyle.italic,
-                                  fontWeight: FontWeight.bold
-                              )
-                          ),
+                                  fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ],
@@ -103,14 +101,14 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
                       IconButton(
                         onPressed: () =>
                             context.push("/teacher_home/students/edit", extra: {
-                              "uid": widget.uid,
-                              "firstName": widget.firstName,
-                              "lastName": widget.lastName,
-                              "email": widget.email,
-                              "sectionId": widget.sectionId,
-                              "dateCreated": widget.dateCreated,
-                              "status": widget.status ?? false,
-                            }),
+                          "uid": widget.uid,
+                          "firstName": widget.firstName,
+                          "lastName": widget.lastName,
+                          "email": widget.email,
+                          "sectionId": widget.sectionId,
+                          "dateCreated": widget.dateCreated,
+                          "status": widget.status ?? false,
+                        }),
                         icon: const Icon(Icons.edit),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -150,15 +148,6 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
                       const SizedBox(width: 10),
                       Row(children: <Widget>[
                         const Text(
-                          "Password:",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 10),
-                        Text("${widget.password}"),
-                      ]),
-                      const SizedBox(width: 10),
-                      Row(children: <Widget>[
-                        const Text(
                           "Assigned Section:",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
@@ -174,8 +163,6 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
                       ])
                     ],
                   ))
-            ]
-        )
-    );
+            ]));
   }
 }
