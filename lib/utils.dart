@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
+enum UserType { admin, teacher, student }
+
 String extractUsername(String email) {
   // Define the regular expression to capture the part before the '@'
   RegExp regex = RegExp(r'^([a-zA-Z0-9._%+-]+)@');
@@ -23,20 +25,19 @@ String formatTimestamp(Timestamp timestamp) {
   return DateFormat('yyyy-MM-dd – kk:mm').format(dateTime); // Format DateTime
 }
 
-Future<Map<String, dynamic>?> getUserProfile() async {
+Future<Map<String, dynamic>?> getUserProfile(UserType userType) async {
   User? user = FirebaseAuth.instance.currentUser;
 
   if (user != null) {
     try {
       DocumentSnapshot doc = await FirebaseFirestore.instance
-          .collection('users')
+          .collection(userType.name)
           .doc(user.uid)
           .get();
-
       if (doc.exists) {
         return doc.data() as Map<String, dynamic>;
       } else {
-        print('No user profile found');
+        print('No ${userType.name} profile found');
       }
     } catch (e) {
       print('Error fetching user profile: $e');
