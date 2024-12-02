@@ -11,6 +11,10 @@ import 'screens/admin/sections/admin_sections_view_screen.dart';
 import 'screens/admin/teachers/admin_teacher_add_screen.dart';
 import 'screens/admin/teachers/admin_teacher_view_screen.dart';
 import 'screens/admin/sections/admin_sections_add_screen.dart';
+import 'screens/student/attempt_history/attempt_history_screen.dart';
+import 'screens/student/change_password/student_change_password_screen.dart';
+import 'screens/student/home/student_home_screen.dart';
+import 'screens/student/login/student_login_screen.dart';
 import 'screens/teacher/change_password/teacher_change_password_screen.dart';
 import 'screens/teacher/home/teacher_home_screen.dart';
 import 'screens/teacher/login/teacher_forgot_password_screen.dart';
@@ -33,23 +37,20 @@ final _router = GoRouter(
 
       final bool isLoggedIn = authNotifier.isLoggedIn;
       final bool isLoading = authNotifier.isLoading;
-      final String userRole = authNotifier.userRole;
 
       if (isLoading) {
         return null;
       }
 
-      switch (userRole) {
-        case "admin":
-          if (isLoggedIn && state.matchedLocation == "/admin_login") {
+      if (isLoggedIn) {
+        switch (state.matchedLocation) {
+          case "/admin_login":
             return "/admin_home";
-          }
-          break;
-        case "teacher":
-          if (isLoggedIn && state.matchedLocation == "/teacher_login") {
+          case "/teacher_login":
             return "/teacher_home";
-          }
-          break;
+          case "/student_login":
+            return "/student_home";
+        }
       }
 
       return null;
@@ -90,6 +91,7 @@ final _router = GoRouter(
                           lastName: extras?['lastName'],
                           email: extras?['email'],
                           dateRegistered: extras?['dateRegistered'],
+                          status: extras?['status'],
                         );
                       })
                 ]),
@@ -162,18 +164,36 @@ final _router = GoRouter(
                       return StudentAttemptDetailsScreen(
                         studentId: extra['studentId'],
                         firstName: extra['firstName'],
-                        lastName:  extra['lastName'],
+                        lastName: extra['lastName'],
                         lessonNumber: extra['lessonNumber'],
                         difficulty: extra['difficulty'],
                       );
                     },
                   ),
-                ]
-            ),
+                ]),
             GoRoute(
                 path: "change_password",
                 builder: (context, state) => TeacherChangePasswordScreen())
-          ])
+          ]),
+      GoRoute(
+          path: "/student_login",
+          builder: (context, state) => StudentLoginScreen(),
+          routes: <RouteBase>[
+            GoRoute(
+                path: "forgot_password",
+                builder: (context, state) => TeacherForgotPasswordScreen())
+          ]),
+      GoRoute(
+          path: "/student_home",
+          builder: (context, state) => StudentHomeScreen(),
+          routes: <RouteBase>[
+            GoRoute(
+                path: "attempt_history",
+                builder: (context, state) => AttemptHistoryScreen()),
+            GoRoute(
+                path: "change_password",
+                builder: (context, state) => StudentChangePasswordScreen())
+          ]),
     ]);
 
 Future<void> main() async {
