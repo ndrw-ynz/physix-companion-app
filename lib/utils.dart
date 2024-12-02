@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 enum UserType { admin, teachers, students }
@@ -45,4 +46,95 @@ Future<Map<String, dynamic>?> getUserProfile(UserType userType) async {
   }
 
   return null;
+}
+
+Future<bool> updateUserPassword(
+    BuildContext context, String currentPassword, String newPassword) async {
+  // Show loading dialog
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return const AlertDialog(
+        content: Row(
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(width: 16),
+            Text("Updating password..."),
+          ],
+        ),
+      );
+    },
+  );
+
+  try {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // Reauthenticate user with current password
+      AuthCredential credential = EmailAuthProvider.credential(
+          email: user.email!, password: currentPassword);
+
+      await user.reauthenticateWithCredential(credential);
+      print("Reauthentication successful.");
+
+      // Update password
+      await user.updatePassword(newPassword);
+      print("Password updated successfully.");
+
+      // Dismiss loading dialog
+      Navigator.of(context).pop();
+
+      // Show success dialog
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("Success"),
+            content: const Text("Password updated successfully."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+
+      return true;
+    } else {
+      print("User not found.");
+      Navigator.of(context).pop(); // Dismiss loading dialog
+      return false;
+    }
+  } catch (e) {
+    print("Failed to update password: $e");
+
+    // Dismiss loading dialog
+    Navigator.of(context).pop();
+
+    // Show error dialog
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Error"),
+          content: const Text("Failed to update password! "),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+
+    return false;
+  }
 }
