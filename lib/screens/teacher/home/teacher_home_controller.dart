@@ -14,7 +14,7 @@ abstract class TeacherHomeController extends State<TeacherHomeScreen> {
 
   Future<void> updateTeacherDisplay() async {
     Map<String, dynamic>? teacherProfile =
-        await getUserProfile(UserType.teacher);
+        await getUserProfile(UserType.teachers);
 
     if (teacherProfile != null) {
       setState(() {

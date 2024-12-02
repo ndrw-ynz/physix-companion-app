@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
-enum UserType { admin, teacher, student }
+enum UserType { admin, teachers, students }
 
 String extractUsername(String email) {
   // Define the regular expression to capture the part before the '@'
