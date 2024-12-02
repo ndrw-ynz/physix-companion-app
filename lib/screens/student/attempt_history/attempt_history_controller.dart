@@ -1,7 +1,6 @@
 part of "attempt_history_screen.dart";
 
 abstract class AttemptHistoryController extends State<AttemptHistoryScreen> {
-  final TextEditingController _historyQueryController = TextEditingController();
   // Query Parameters
   // Lesson
   Map<String, String> attemptCollectionNames = {
@@ -51,11 +50,13 @@ abstract class AttemptHistoryController extends State<AttemptHistoryScreen> {
             .where("difficulty", isEqualTo: selectedDifficulty!)
             .get();
 
-        queryHistoryList = snapshot.docs.map((doc) {
-          Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-          data['lessonName'] = selectedLesson;
-          return data;
-        }).toList();
+        setState(() {
+          queryHistoryList = snapshot.docs.map((doc) {
+            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+            data['lessonName'] = selectedLesson;
+            return data;
+          }).toList();
+        });
       } catch (e) {
         print("Error fetching attempt history: $e");
       }

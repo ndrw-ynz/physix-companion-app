@@ -3,8 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:physix_companion_app/widgets/students/attempt_history_widget.dart';
 
-import '../../../utils.dart';
-
 part "attempt_history_controller.dart";
 
 class AttemptHistoryScreen extends StatefulWidget {
@@ -19,7 +17,7 @@ class _AttemptHistoryScreenState extends AttemptHistoryController {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Game History List"),
+          title: const Text("Game History"),
           elevation: 0,
           backgroundColor: Colors.white,
           shape: const Border(
@@ -43,40 +41,19 @@ class _AttemptHistoryScreenState extends AttemptHistoryController {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextField(
-                      controller: _historyQueryController,
-                      decoration: InputDecoration(
-                        hintText: "Search",
-                        hintStyle: const TextStyle(
-                            color: Color.fromARGB(255, 194, 194, 194)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 8.0),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.search),
-                          onPressed: () {
-                            setState(() {
-                              _fetchAttemptHistory();
-                            });
-                          },
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 12.0),
                     // Query parameters for searching
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         // Lesson Selection
                         Container(
-                          padding: const EdgeInsets.all(5.0),
+                          padding:
+                              const EdgeInsets.fromLTRB(10.0, 2.5, 10.0, 2.5),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5.0),
+                            border: const Border.fromBorderSide(
+                                BorderSide(color: Colors.black, width: 1.5)),
                           ),
                           child: DropdownButton<String>(
                             value: selectedLesson,
@@ -97,19 +74,20 @@ class _AttemptHistoryScreenState extends AttemptHistoryController {
                             hint: const Text(
                               'Select Lesson',
                               style: TextStyle(
-                                color: Color.fromARGB(255, 0, 0,
-                                    0), // Change hint text color to black
-                              ),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
                         // Difficulty
                         Container(
-                          padding: const EdgeInsets.all(5.0),
+                          padding:
+                              const EdgeInsets.fromLTRB(10.0, 2.5, 10.0, 2.5),
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5.0),
+                              border: const Border.fromBorderSide(
+                                  BorderSide(color: Colors.black, width: 1.5))),
                           child: DropdownButton<String>(
                             value: selectedDifficulty,
                             icon: const Icon(Icons.arrow_downward),
@@ -129,19 +107,41 @@ class _AttemptHistoryScreenState extends AttemptHistoryController {
                             hint: const Text(
                               'Select Difficulty',
                               style: TextStyle(
-                                color: Color.fromARGB(255, 0, 0,
-                                    0), // Change hint text color to black
-                              ),
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 12.0),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.search, color: Colors.black),
+                        label: const Text(
+                          "Search",
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _fetchAttemptHistory();
+                          });
+                        },
+                        iconAlignment: IconAlignment.start,
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          side:
+                              const BorderSide(color: Colors.black, width: 1.5),
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 12.0),
               Expanded(
                 child: ListView.builder(
                   itemCount: queryHistoryList.length,
