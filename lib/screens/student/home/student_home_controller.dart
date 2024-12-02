@@ -3,6 +3,19 @@ part of "student_home_screen.dart";
 abstract class StudentHomeController extends State<StudentHomeScreen> {
   String? studentDisplayName;
   Map<String, dynamic>? sectionData;
+  Map<String, dynamic>? unlockedLevelData;
+
+  Map<int, String> lessonNames = {
+    1: "Lesson 1",
+    2: "Lesson 2",
+    3: "Lesson 3",
+    4: "Lesson 4",
+    5: "Lesson 5",
+    6: "Lesson 6",
+    7: "Lesson 7",
+    8: "Lesson 8",
+    9: "Lesson 9",
+  };
 
   @override
   void initState() {
@@ -29,6 +42,25 @@ abstract class StudentHomeController extends State<StudentHomeScreen> {
       }
     } catch (e) {
       print("Error fetching section data: $e");
+    }
+
+    // Fetch unlocked level data
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      DocumentSnapshot<Map<String, dynamic>> doc = await FirebaseFirestore
+          .instance
+          .collection('unlockedLevels')
+          .doc(user?.uid)
+          .get();
+
+      if (doc.exists) {
+        setState(() {
+          unlockedLevelData = doc.data();
+        });
+      }
+    } catch (e) {
+      print("Error fetching unlocked levels data: $e");
     }
 
     if (studentProfile != null) {

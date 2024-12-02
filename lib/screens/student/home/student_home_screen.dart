@@ -66,7 +66,13 @@ class _StudentHomeScreenState extends StudentHomeController {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildTile(
-                    context, "Section", sectionData?["sectionName"] ?? ""),
+                    context, "Section", sectionData?["sectionName"] ?? "N/A"),
+                const SizedBox(height: 20.0),
+                _buildTile(
+                    context,
+                    "Highest Unlocked Activity Lesson",
+                    lessonNames[unlockedLevelData?["highestUnlockedLesson"]] ??
+                        "N/A"),
               ],
             )),
       ),
@@ -75,10 +81,10 @@ class _StudentHomeScreenState extends StudentHomeController {
 
   Widget _buildTile(BuildContext context, String label, String description) {
     return ListTile(
-      contentPadding: const EdgeInsets.all(16.0),
+      contentPadding: const EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 0.0),
       tileColor: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(32.0),
+        borderRadius: BorderRadius.circular(16.0),
         side: const BorderSide(color: Colors.black, width: 1.5),
       ),
       title: Column(
