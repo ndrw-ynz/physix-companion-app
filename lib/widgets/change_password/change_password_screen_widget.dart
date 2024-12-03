@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 
-import '../../../utils.dart';
+import '../../utils.dart';
 
-part "student_change_password_controller.dart";
-
-class StudentChangePasswordScreen extends StatefulWidget {
-  const StudentChangePasswordScreen({super.key});
+class ChangePasswordScreenWidget extends StatefulWidget {
+  const ChangePasswordScreenWidget({super.key});
 
   @override
-  State<StudentChangePasswordScreen> createState() =>
-      _StudentChangePasswordScreenState();
+  State<ChangePasswordScreenWidget> createState() =>
+      _ChangePasswordScreenWidgetState();
 }
 
-class _StudentChangePasswordScreenState
-    extends StudentChangePasswordController {
+class _ChangePasswordScreenWidgetState
+    extends State<ChangePasswordScreenWidget> {
+  final _formKey = GlobalKey<FormState>();
+
+  final _oldPasswordController = TextEditingController();
+  final _newPasswordController = TextEditingController();
+  bool _isOldPasswordObscured = true;
+  bool _isNewPasswordObscured = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,8 +113,7 @@ class _StudentChangePasswordScreenState
               const SizedBox(height: 15.0),
               ElevatedButton(
                   onPressed: () => {
-                        if (_formKey.currentState!.validate())
-                          _updateStudentPassword()
+                        if (_formKey.currentState!.validate()) _updatePassword()
                       },
                   style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
@@ -124,5 +128,16 @@ class _StudentChangePasswordScreenState
         ),
       ),
     );
+  }
+
+  Future<void> _updatePassword() async {
+    bool isUpdated = await updateUserPassword(
+        context, _oldPasswordController.text, _newPasswordController.text);
+
+    if (isUpdated) {
+      _oldPasswordController.clear();
+      _newPasswordController.clear();
+    }
+    print("Is updated: $isUpdated");
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:physix_companion_app/widgets/change_password/change_password_screen_widget.dart';
 import 'commons.dart';
 import 'firebase_options.dart';
 
@@ -12,10 +13,8 @@ import 'screens/admin/teachers/admin_teacher_add_screen.dart';
 import 'screens/admin/teachers/admin_teacher_view_screen.dart';
 import 'screens/admin/sections/admin_sections_add_screen.dart';
 import 'screens/student/attempt_history/attempt_history_screen.dart';
-import 'screens/student/change_password/student_change_password_screen.dart';
 import 'screens/student/home/student_home_screen.dart';
 import 'screens/student/login/student_login_screen.dart';
-import 'screens/teacher/change_password/teacher_change_password_screen.dart';
 import 'screens/teacher/home/teacher_home_screen.dart';
 import 'screens/teacher/login/teacher_forgot_password_screen.dart';
 import 'screens/teacher/login/teacher_login_screen.dart';
@@ -173,7 +172,7 @@ final _router = GoRouter(
                 ]),
             GoRoute(
                 path: "change_password",
-                builder: (context, state) => TeacherChangePasswordScreen())
+                builder: (context, state) => const ChangePasswordScreenWidget())
           ]),
       GoRoute(
           path: "/student_login",
@@ -192,7 +191,7 @@ final _router = GoRouter(
                 builder: (context, state) => AttemptHistoryScreen()),
             GoRoute(
                 path: "change_password",
-                builder: (context, state) => StudentChangePasswordScreen())
+                builder: (context, state) => ChangePasswordScreenWidget())
           ]),
     ]);
 
