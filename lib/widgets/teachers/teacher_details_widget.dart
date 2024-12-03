@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:physix_companion_app/utils.dart';
 
-class TeacherDetailsWidget extends StatelessWidget {
+class TeacherDetailsWidget extends StatefulWidget {
   const TeacherDetailsWidget(
       {super.key,
       required this.itemNumber,
@@ -12,8 +12,8 @@ class TeacherDetailsWidget extends StatelessWidget {
       required this.firstName,
       required this.email,
       required this.username,
-      required this.password,
-      required this.dateRegistered});
+      required this.dateRegistered,
+      required this.status});
 
   final int itemNumber;
   final String uid;
@@ -21,9 +21,14 @@ class TeacherDetailsWidget extends StatelessWidget {
   final String firstName;
   final String email;
   final String username;
-  final String password;
   final Timestamp dateRegistered;
+  final bool? status;
 
+  @override
+  State<TeacherDetailsWidget> createState() => _TeacherDetailsWidgetState();
+}
+
+class _TeacherDetailsWidgetState extends State<TeacherDetailsWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,18 +45,48 @@ class TeacherDetailsWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      const SizedBox(width: 10),
-                      Text("$itemNumber. ",
-                          style: const TextStyle(
-                              fontSize: 22.0, fontWeight: FontWeight.bold)),
-                      const SizedBox(width: 10), // Space between texts
-                      Text("$lastName, $firstName",
-                          style: const TextStyle(
-                              fontSize: 18.0,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.bold)),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: <Widget>[
+                          const SizedBox(width: 10),
+                          Container(
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: (widget.status ?? false)
+                                  ? Colors.green
+                                  : Colors.red,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            (widget.status ?? false) ? "Active" : "Inactive",
+                            style: TextStyle(
+                              color: (widget.status ?? false)
+                                  ? Colors.green
+                                  : Colors.red,
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          const SizedBox(width: 10),
+                          Text("${widget.itemNumber}. ",
+                              style: const TextStyle(
+                                  fontSize: 22.0, fontWeight: FontWeight.bold)),
+                          const SizedBox(width: 10), // Space between texts
+                          Text("${widget.lastName}, ${widget.firstName}",
+                              style: const TextStyle(
+                                  fontSize: 18.0,
+                                  fontStyle: FontStyle.italic,
+                                  fontWeight: FontWeight.bold)),
+                        ],
+                      ),
                     ],
                   ),
                   // Right side: Two Buttons
@@ -60,11 +95,12 @@ class TeacherDetailsWidget extends StatelessWidget {
                       IconButton(
                         onPressed: () =>
                             context.push("/admin_home/teachers/edit", extra: {
-                          "uid": uid,
-                          "firstName": firstName,
-                          "lastName": lastName,
-                          "email": email,
-                          "dateRegistered": dateRegistered,
+                          "uid": widget.uid,
+                          "firstName": widget.firstName,
+                          "lastName": widget.lastName,
+                          "email": widget.email,
+                          "dateRegistered": widget.dateRegistered,
+                          "status": widget.status ?? false
                         }),
                         icon: const Icon(Icons.edit),
                         style: ElevatedButton.styleFrom(
@@ -99,7 +135,7 @@ class TeacherDetailsWidget extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(width: 10),
-                        Text("$email"),
+                        Text("${widget.email}"),
                       ]),
                       const SizedBox(width: 10),
                       Row(children: <Widget>[
@@ -108,23 +144,14 @@ class TeacherDetailsWidget extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(width: 10),
-                        Text("$username"),
-                      ]),
-                      const SizedBox(width: 10),
-                      Row(children: <Widget>[
-                        const Text(
-                          "Password:",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 10),
-                        Text("$password"),
+                        Text("${widget.username}"),
                       ]),
                       const SizedBox(width: 10),
                       Row(children: <Widget>[
                         const Text("Date Registered:",
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         const SizedBox(width: 10),
-                        Text(formatTimestamp(dateRegistered)),
+                        Text(formatTimestamp(widget.dateRegistered)),
                         //Text(yearRegistered.toDate().year.toString()),
                       ])
                     ],

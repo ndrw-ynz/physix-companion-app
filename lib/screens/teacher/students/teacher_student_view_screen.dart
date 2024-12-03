@@ -67,7 +67,7 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                           icon: const Icon(Icons.search),
                           onPressed: () {
                             setState(() {
-                              if (_studentQueryController.text.isEmpty){
+                              if (_studentQueryController.text.isEmpty) {
                                 _fetchAllStudents();
                               } else {
                                 _filterStudentSearch();
@@ -123,14 +123,15 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                     final student = filteredList[index];
                     return StudentDetailsWidget(
                       itemNumber: index + 1,
-                      uid: student["uid"] ?? "Unknown ID",
+                      uid: filteredList[index]["id"],
                       lastName: student["lastName"] ?? "None",
                       firstName: student["firstName"] ?? "None",
                       email: student['email'] ?? 'Unknown Email',
                       username: student['username'] ?? 'Unknown Username',
-                      password: student['password'] ?? 'Unknown Password',
-                      sectionId: student['sectionId'] ?? 'Unknown Section ID',  // you can keep this
-                      sectionName: sectionIdToName[student['sectionId']] ?? 'Unknown Section Name',  // modified this line
+                      sectionId: student['sectionId'] ??
+                          'Unknown Section ID', // you can keep this
+                      sectionName: sectionIdToName[student['sectionId']] ??
+                          'Unknown Section Name', // modified this line
                       dateCreated: student['dateCreated'] ?? Timestamp.now(),
                       status: student['status'] ?? false,
                     );

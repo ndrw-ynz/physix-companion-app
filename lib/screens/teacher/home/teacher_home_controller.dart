@@ -2,8 +2,8 @@ part of "teacher_home_screen.dart";
 
 abstract class TeacherHomeController extends State<TeacherHomeScreen> {
   String? teacherDisplayName;
-  List<Map<String, dynamic>> sectionsWithCounts = [
-  ]; // Holds section name and student count
+  List<Map<String, dynamic>> sectionsWithCounts =
+      []; // Holds section name and student count
 
   @override
   void initState() {
@@ -13,12 +13,13 @@ abstract class TeacherHomeController extends State<TeacherHomeScreen> {
   }
 
   Future<void> updateTeacherDisplay() async {
-    Map<String, dynamic>? teacherProfile = await getUserProfile();
+    Map<String, dynamic>? teacherProfile =
+        await getUserProfile(UserType.teachers);
 
     if (teacherProfile != null) {
       setState(() {
         teacherDisplayName =
-        "${teacherProfile["firstName"]} ${teacherProfile["lastName"]}";
+            "${teacherProfile["firstName"]} ${teacherProfile["lastName"]}";
       });
     }
   }

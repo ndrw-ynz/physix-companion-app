@@ -18,10 +18,8 @@ abstract class AdminTeacherViewController
 
   Future<void> _fetchAllTeachers() async {
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .where('role', isEqualTo: 'teacher')
-          .get();
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('teachers').get();
 
       setState(() {
         teacherList = snapshot.docs.map((doc) {
@@ -57,10 +55,8 @@ abstract class AdminTeacherViewController
     Set<String> uniqueYears = {};
 
     try {
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .where('role', isEqualTo: 'teacher')
-          .get();
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('teachers').get();
 
       for (var doc in snapshot.docs) {
         Timestamp timestamp = doc["dateCreated"];

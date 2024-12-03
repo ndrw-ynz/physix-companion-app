@@ -145,14 +145,12 @@ abstract class SectionFormController extends State<SectionFormWidget> {
 
   Future<void> _fetchAllTeachers() async {
     try {
-      QuerySnapshot teacherSnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .where('role', isEqualTo: 'teacher')
-          .get();
+      QuerySnapshot teacherSnapshot =
+          await FirebaseFirestore.instance.collection('teachers').get();
 
       List<DropdownMenuItem<String>> items = teacherSnapshot.docs.map((doc) {
         String teacherName = "${doc['lastName']}, ${doc['firstName']}";
-        String uid = doc['uid'];
+        String uid = doc.id;
 
         return DropdownMenuItem<String>(
           value: uid,

@@ -121,13 +121,13 @@ class _AdminTeacherViewScreenState extends AdminTeacherViewController {
                     final teacher = filteredList[index];
                     return TeacherDetailsWidget(
                       itemNumber: index + 1,
-                      uid: teacher["uid"],
+                      uid: filteredList[index]["id"],
                       lastName: teacher["lastName"] ?? "None",
                       firstName: teacher["firstName"] ?? "None",
                       email: teacher['email'] ?? 'Unknown Email',
                       username: teacher['username'] ?? 'Unknown Username',
-                      password: teacher['password'] ?? 'Unknown Password',
                       dateRegistered: teacher['dateCreated'] ?? Timestamp.now(),
+                      status: teacher['status'] ?? false,
                     );
                   },
                 ),

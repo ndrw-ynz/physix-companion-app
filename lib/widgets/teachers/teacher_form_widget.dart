@@ -8,21 +8,22 @@ import 'package:physix_companion_app/utils.dart';
 import '../../commons.dart';
 
 class TeacherFormWidget extends StatefulWidget {
-  const TeacherFormWidget({
-    super.key,
-    required this.formMode,
-    this.uid,
-    this.firstName,
-    this.lastName,
-    this.email,
-    required this.dateRegistered,
-  });
+  const TeacherFormWidget(
+      {super.key,
+      required this.formMode,
+      this.uid,
+      this.firstName,
+      this.lastName,
+      this.email,
+      required this.dateRegistered,
+      this.status});
   final FormMode formMode;
   final String? uid;
   final String? firstName;
   final String? lastName;
   final String? email;
   final Timestamp dateRegistered;
+  final bool? status;
 
   @override
   State<TeacherFormWidget> createState() => _TeacherFormWidgetState();
@@ -33,7 +34,7 @@ class _TeacherFormWidgetState extends TeacherFormController {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text("${_getModeTypeDesc()} Teacher"),
+            title: Text("${_getFormTypeDesc()} Teacher"),
             elevation: 0,
             backgroundColor: Colors.white,
             shape: const Border(
@@ -45,8 +46,8 @@ class _TeacherFormWidgetState extends TeacherFormController {
           padding: const EdgeInsets.only(
               top: 20.0, left: 42.0, right: 42.0, bottom: 20.0),
           child: Column(children: <Widget>[
-            Text("${_getModeTypeDesc()} Teacher",
-                style: TextStyle(fontSize: 28.0)),
+            Text("${_getFormTypeDesc()} Teacher",
+                style: const TextStyle(fontSize: 28.0)),
             Container(
                 margin: const EdgeInsets.all(15.0),
                 padding: const EdgeInsets.all(20.0),
@@ -55,9 +56,9 @@ class _TeacherFormWidgetState extends TeacherFormController {
                     borderRadius: BorderRadius.circular(10.0),
                     color: Colors.grey[200]),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    // First name field
                     const Text(
                       "First Name",
                       style: TextStyle(fontSize: 16.0),
@@ -73,6 +74,7 @@ class _TeacherFormWidgetState extends TeacherFormController {
                       ),
                     ),
                     const SizedBox(height: 20),
+                    // Last name field
                     const Text(
                       "Last Name",
                       style: TextStyle(fontSize: 16.0),
@@ -88,36 +90,118 @@ class _TeacherFormWidgetState extends TeacherFormController {
                       ),
                     ),
                     const SizedBox(height: 20),
+
+                    // Email field
+                    if (widget.formMode == FormMode.add)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Email",
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                            controller: _emailController,
+                            style: const TextStyle(color: Colors.black),
+                            decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+
+                          // Date registered
+                          const Text(
+                            "Date Registered",
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                          TextFormField(
+                            controller: _dateController,
+                            style: const TextStyle(color: Colors.black),
+                            decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Colors.grey,
+                              border: OutlineInputBorder(),
+                            ),
+                            readOnly: true,
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
+
+                    // Status selection
                     const Text(
-                      "Email",
+                      "Status",
                       style: TextStyle(fontSize: 16.0),
                     ),
                     const SizedBox(height: 10),
-                    TextFormField(
-                      controller: _emailController,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      "Year Registered",
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    TextFormField(
-                      controller: _dateController,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey,
-                        border: OutlineInputBorder(),
-                      ),
-                      readOnly: true,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                teacherStatus = true;
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              decoration: BoxDecoration(
+                                color: teacherStatus == true
+                                    ? Colors.green
+                                    : Colors.white,
+                                border: Border.all(color: Colors.black),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Active',
+                                  style: TextStyle(
+                                    color: teacherStatus == true
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                teacherStatus = false;
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              decoration: BoxDecoration(
+                                color: teacherStatus == false
+                                    ? Colors.red
+                                    : Colors.white,
+                                border: Border.all(color: Colors.black),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Inactive',
+                                  style: TextStyle(
+                                    color: teacherStatus == false
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 20),
+
                     const Text(
                       "Username and Password are auto-generated*",
                       style: TextStyle(
@@ -134,7 +218,7 @@ class _TeacherFormWidgetState extends TeacherFormController {
                                 "${_firstNameController.text} ${_lastNameController.text}");
                           },
                           style: ButtonStyle(),
-                          child: Text("${_getModeTypeDesc()} Teacher")),
+                          child: Text("${_getFormTypeDesc()} Teacher")),
                     )
                   ],
                 ))
@@ -149,6 +233,8 @@ abstract class TeacherFormController extends State<TeacherFormWidget> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
 
+  bool? teacherStatus;
+
   @override
   void initState() {
     super.initState();
@@ -161,13 +247,15 @@ abstract class TeacherFormController extends State<TeacherFormWidget> {
       _lastNameController.text = widget.lastName ?? '';
       _emailController.text = widget.email ?? '';
       _dateController.text = formatTimestamp(widget.dateRegistered);
+      teacherStatus = widget.status ?? true;
     } else {
       // Set default values for add mode
       _dateController.text = formatTimestamp(Timestamp.now());
+      teacherStatus = true;
     }
   }
 
-  String _getModeTypeDesc() {
+  String _getFormTypeDesc() {
     String result;
     switch (widget.formMode) {
       case FormMode.add:
@@ -185,9 +273,9 @@ abstract class TeacherFormController extends State<TeacherFormWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('${_getModeTypeDesc()} Teacher'),
+          title: Text('${_getFormTypeDesc()} Teacher'),
           content: Text(
-              'Are you sure you want to ${_getModeTypeDesc()} $teacherName?'),
+              'Are you sure you want to ${_getFormTypeDesc().toLowerCase()} $teacherName?'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -205,7 +293,7 @@ abstract class TeacherFormController extends State<TeacherFormWidget> {
                 Navigator.of(context).pop();
                 _showAddSuccessDialog(context);
               },
-              child: Text(_getModeTypeDesc()),
+              child: Text(_getFormTypeDesc()),
             ),
           ],
         );
@@ -227,15 +315,13 @@ abstract class TeacherFormController extends State<TeacherFormWidget> {
       String uid = userCredential.user!.uid;
 
       // Save additional teacher data in Firestore
-      await FirebaseFirestore.instance.collection('users').doc(uid).set({
-        'uid': uid,
-        'role': "teacher",
+      await FirebaseFirestore.instance.collection('teachers').doc(uid).set({
         'email': _emailController.text.trim(),
         'firstName': _firstNameController.text.trim(),
         'lastName': _lastNameController.text.trim(),
         'username': _emailController.text.trim(),
-        'password': extractUsername(_emailController.text.trim()),
         'dateCreated': FieldValue.serverTimestamp(),
+        'status': teacherStatus ?? true,
       });
 
       print("Teacher account created successfully!");
@@ -253,13 +339,14 @@ abstract class TeacherFormController extends State<TeacherFormWidget> {
     try {
       // Update the teacher's data in Firestore
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('teachers')
           .doc(widget.uid)
           .update({
         'email': _emailController.text.trim(),
         'firstName': _firstNameController.text.trim(),
         'lastName': _lastNameController.text.trim(),
         'username': _emailController.text.trim(),
+        'status': teacherStatus ?? true,
       });
       print("Teacher account updated successfully!");
     } catch (e) {
@@ -272,7 +359,7 @@ abstract class TeacherFormController extends State<TeacherFormWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Teacher ${_getModeTypeDesc()}ed Successfully'),
+          title: Text('Teacher ${_getFormTypeDesc()}ed Successfully'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
