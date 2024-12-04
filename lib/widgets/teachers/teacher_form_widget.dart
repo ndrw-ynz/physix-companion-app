@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -305,17 +306,24 @@ abstract class TeacherFormController extends State<TeacherFormWidget> {
     // username - > firstname + lastname
     // password -> email head
     try {
-      // Create user in Firebase Authentication
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: _emailController.text.trim(),
-              password: extractUsername(_emailController.text.trim()));
-      // EXTRACT THE INFORMATION FROM PASSWORD
+      FirebaseApp app = await Firebase.initializeApp(
+          name: 'Secondary', options: Firebase.app().options);
 
-      String uid = userCredential.user!.uid;
+      // Create user in Firebase Authentication
+      UserCredential teacherCredential =
+          await FirebaseAuth.instanceFor(app: app)
+              .createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: extractUsername(_emailController.text.trim()),
+      );
+
+      String teacherUid = teacherCredential.user!.uid;
 
       // Save additional teacher data in Firestore
-      await FirebaseFirestore.instance.collection('teachers').doc(uid).set({
+      await FirebaseFirestore.instance
+          .collection('teachers')
+          .doc(teacherUid)
+          .set({
         'email': _emailController.text.trim(),
         'firstName': _firstNameController.text.trim(),
         'lastName': _lastNameController.text.trim(),
@@ -324,6 +332,7 @@ abstract class TeacherFormController extends State<TeacherFormWidget> {
         'status': teacherStatus ?? true,
       });
 
+      await app.delete();
       print("Teacher account created successfully!");
     } catch (e) {
       print("Error creating teacher account: $e");
