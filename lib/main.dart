@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,9 +10,7 @@ import 'screens/admin/login/admin_login_screen.dart';
 import 'screens/admin/login/admin_forgot_password_screen.dart';
 import 'screens/admin/home/admin_home_screen.dart';
 import 'screens/admin/sections/admin_sections_view_screen.dart';
-import 'screens/admin/teachers/admin_teacher_add_screen.dart';
 import 'screens/admin/teachers/admin_teacher_view_screen.dart';
-import 'screens/admin/sections/admin_sections_add_screen.dart';
 import 'screens/student/attempt_history/attempt_history_screen.dart';
 import 'screens/student/home/student_home_screen.dart';
 import 'screens/student/login/student_login_screen.dart';
@@ -21,7 +20,6 @@ import 'screens/teacher/login/teacher_login_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/teacher/student_progress/student_attempts_details_screen.dart';
 import 'screens/teacher/student_progress/teacher_student_progress_screen.dart';
-import 'screens/teacher/students/teacher_student_add_screen.dart';
 import 'screens/teacher/students/teacher_student_view_screen.dart';
 import 'widgets/sections/section_form_widget.dart';
 import 'widgets/students/student_form_widget.dart';
@@ -58,26 +56,29 @@ final _router = GoRouter(
       GoRoute(
           path: "/",
           builder: (context, state) =>
-              HomeScreen(title: "PhysIX Companion App")),
+              const HomeScreen(title: "PhysIX Companion App")),
       GoRoute(
           path: "/admin_login",
-          builder: (context, state) => AdminLoginScreen(),
+          builder: (context, state) => const AdminLoginScreen(),
           routes: <RouteBase>[
             GoRoute(
                 path: "forgot_password",
-                builder: (context, state) => AdminForgotPasswordScreen())
+                builder: (context, state) => const AdminForgotPasswordScreen())
           ]),
       GoRoute(
           path: "/admin_home",
-          builder: (context, state) => AdminHomeScreen(),
+          builder: (context, state) => const AdminHomeScreen(),
           routes: <RouteBase>[
             GoRoute(
                 path: "teachers",
-                builder: (context, state) => AdminTeacherViewScreen(),
+                builder: (context, state) => const AdminTeacherViewScreen(),
                 routes: <RouteBase>[
                   GoRoute(
                       path: "add",
-                      builder: (context, state) => AdminTeacherAddScreen()),
+                      builder: (context, state) => TeacherFormWidget(
+                            formMode: FormMode.add,
+                            dateRegistered: Timestamp.now(),
+                          )),
                   GoRoute(
                       path: "edit",
                       builder: (context, state) {
@@ -96,11 +97,14 @@ final _router = GoRouter(
                 ]),
             GoRoute(
                 path: "sections",
-                builder: (context, state) => AdminSectionsViewScreen(),
+                builder: (context, state) => const AdminSectionsViewScreen(),
                 routes: <RouteBase>[
                   GoRoute(
                       path: "add",
-                      builder: (context, state) => AdminSectionsAddScreen()),
+                      builder: (context, state) => SectionFormWidget(
+                            formMode: FormMode.add,
+                            dateRegistered: Timestamp.now(),
+                          )),
                   GoRoute(
                       path: "edit",
                       builder: (context, state) {
@@ -118,23 +122,27 @@ final _router = GoRouter(
           ]),
       GoRoute(
           path: "/teacher_login",
-          builder: (context, state) => TeacherLoginScreen(),
+          builder: (context, state) => const TeacherLoginScreen(),
           routes: <RouteBase>[
             GoRoute(
                 path: "forgot_password",
-                builder: (context, state) => TeacherForgotPasswordScreen())
+                builder: (context, state) =>
+                    const TeacherForgotPasswordScreen())
           ]),
       GoRoute(
           path: "/teacher_home",
-          builder: (context, state) => TeacherHomeScreen(),
+          builder: (context, state) => const TeacherHomeScreen(),
           routes: <RouteBase>[
             GoRoute(
                 path: "students",
-                builder: (context, state) => TeacherStudentViewScreen(),
+                builder: (context, state) => const TeacherStudentViewScreen(),
                 routes: <RouteBase>[
                   GoRoute(
                       path: "add",
-                      builder: (context, state) => TeacherStudentAddScreen()),
+                      builder: (context, state) => StudentFormWidget(
+                            formMode: FormMode.add,
+                            dateCreated: Timestamp.now(),
+                          )),
                   GoRoute(
                       path: "edit",
                       builder: (context, state) {
@@ -154,7 +162,8 @@ final _router = GoRouter(
                 ]),
             GoRoute(
                 path: "student_progress",
-                builder: (context, state) => TeacherStudentProgressScreen(),
+                builder: (context, state) =>
+                    const TeacherStudentProgressScreen(),
                 routes: <RouteBase>[
                   GoRoute(
                     path: "attempts",
@@ -176,22 +185,23 @@ final _router = GoRouter(
           ]),
       GoRoute(
           path: "/student_login",
-          builder: (context, state) => StudentLoginScreen(),
+          builder: (context, state) => const StudentLoginScreen(),
           routes: <RouteBase>[
             GoRoute(
                 path: "forgot_password",
-                builder: (context, state) => TeacherForgotPasswordScreen())
+                builder: (context, state) =>
+                    const TeacherForgotPasswordScreen())
           ]),
       GoRoute(
           path: "/student_home",
-          builder: (context, state) => StudentHomeScreen(),
+          builder: (context, state) => const StudentHomeScreen(),
           routes: <RouteBase>[
             GoRoute(
                 path: "attempt_history",
-                builder: (context, state) => AttemptHistoryScreen()),
+                builder: (context, state) => const AttemptHistoryScreen()),
             GoRoute(
                 path: "change_password",
-                builder: (context, state) => ChangePasswordScreenWidget())
+                builder: (context, state) => const ChangePasswordScreenWidget())
           ]),
     ]);
 
