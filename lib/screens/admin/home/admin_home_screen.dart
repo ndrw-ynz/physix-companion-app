@@ -54,9 +54,7 @@ class _AdminHomeScreenState extends AdminHomeController {
               ListTile(
                 leading: const Icon(Icons.lock_reset),
                 title: const Text('Change Password'),
-                onTap: () {
-                  // Handle navigation or any action
-                },
+                onTap: () => context.push("/admin_home/change_password"),
               ),
               ListTile(
                 leading: const Icon(Icons.exit_to_app_outlined),

@@ -118,7 +118,10 @@ final _router = GoRouter(
                           dateRegistered: extras?["dateRegistered"],
                         );
                       })
-                ])
+                ]),
+            GoRoute(
+                path: "change_password",
+                builder: (context, state) => const ChangePasswordScreenWidget())
           ]),
       GoRoute(
           path: "/teacher_login",
