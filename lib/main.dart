@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:physix_companion_app/utils.dart';
 import 'package:physix_companion_app/widgets/change_password/change_password_screen_widget.dart';
 import 'commons.dart';
 import 'firebase_options.dart';
@@ -39,6 +40,7 @@ final _router = GoRouter(
         return null;
       }
 
+      // Routing for login
       if (isLoggedIn) {
         switch (state.matchedLocation) {
           case "/admin_login":
@@ -47,6 +49,50 @@ final _router = GoRouter(
             return "/teacher_home";
           case "/student_login":
             return "/student_home";
+        }
+      }
+
+      final userType = authNotifier.userType;
+
+      // Routing for when the user is currently an admin
+      if (state.matchedLocation.startsWith("/admin_home")) {
+        switch (userType) {
+          case UserType.students:
+            return "/student_home";
+          case UserType.teachers:
+            return "/teacher_home";
+          case null:
+            return "/";
+          case UserType.admin:
+            return null;
+        }
+      }
+
+      // Routing for when the user is currently a teacher
+      if (state.matchedLocation.startsWith("/teacher_home")) {
+        switch (userType) {
+          case UserType.admin:
+            return "/admin_home";
+          case UserType.students:
+            return "/student_home";
+          case UserType.teachers:
+            return null;
+          case null:
+            return "/";
+        }
+      }
+
+      // Routing for when the user is currently a student
+      if (state.matchedLocation.startsWith("/student_home")) {
+        switch (userType) {
+          case UserType.admin:
+            return "/admin_home";
+          case UserType.teachers:
+            return "/teacher_home";
+          case UserType.students:
+            return null;
+          case null:
+            return "/";
         }
       }
 

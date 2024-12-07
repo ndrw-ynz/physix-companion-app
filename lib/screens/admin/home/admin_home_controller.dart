@@ -16,6 +16,7 @@ abstract class AdminHomeController extends State<AdminHomeScreen> {
       await FirebaseAuth.instance.signOut();
       print("User logged out successfully");
       context.go("/");
+      authNotifier.logoutUser();
     } catch (e) {
       print("Error logging out: $e");
     }
