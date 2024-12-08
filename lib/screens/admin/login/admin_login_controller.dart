@@ -9,10 +9,9 @@ abstract class AdminLoginController extends State<AdminLoginScreen> {
   // validate
   Future<void> _validateAdminLogin() async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: _usernameController.text.trim(),
-              password: _passwordController.text.trim());
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _usernameController.text.trim(),
+          password: _passwordController.text.trim());
 
       print("USER SIGNED IN!");
       showDialog(
