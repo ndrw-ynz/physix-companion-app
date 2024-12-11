@@ -126,41 +126,54 @@ class _StudentDetailsWidgetState extends State<StudentDetailsWidget> {
                       borderRadius: BorderRadius.circular(10.0),
                       color: Colors.grey[200]),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Row(children: <Widget>[
-                        const Text(
-                          "Email:",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 10),
-                        Text("${widget.email}"),
-                      ]),
+                      Wrap(
+                          direction: Axis.horizontal,
+                          alignment: WrapAlignment.start,
+                          children: <Widget>[
+                            const Text(
+                              "Email:",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(widget.email),
+                          ]),
                       const SizedBox(width: 10),
-                      Row(children: <Widget>[
-                        const Text(
-                          "Username:",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 10),
-                        Text("${widget.username}"),
-                      ]),
+                      Wrap(
+                          direction: Axis.horizontal,
+                          alignment: WrapAlignment.start,
+                          children: <Widget>[
+                            const Text(
+                              "Username:",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(widget.username),
+                          ]),
                       const SizedBox(width: 10),
-                      Row(children: <Widget>[
-                        const Text(
-                          "Assigned Section:",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 10),
-                        Text("${widget.sectionName}"),
-                      ]),
+                      Wrap(
+                          direction: Axis.horizontal,
+                          alignment: WrapAlignment.start,
+                          children: <Widget>[
+                            const Text(
+                              "Assigned Section:",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(widget.sectionName),
+                          ]),
                       const SizedBox(width: 10),
-                      Row(children: <Widget>[
-                        const Text("Date Registered:",
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        const SizedBox(width: 10),
-                        Text(formatTimestamp(widget.dateCreated)),
-                      ])
+                      Wrap(
+                          direction: Axis.horizontal,
+                          alignment: WrapAlignment.start,
+                          children: <Widget>[
+                            const Text("Date Registered:",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            const SizedBox(width: 10),
+                            Text(formatTimestamp(widget.dateCreated)),
+                          ])
                     ],
                   ))
             ]));
