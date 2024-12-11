@@ -35,7 +35,7 @@ class _StudentHomeScreenState extends StudentHomeController {
                 color: Colors.grey,
               ),
               child: Text(
-                'STUDENT',
+                'PhysIX - STUDENT',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,

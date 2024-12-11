@@ -36,7 +36,7 @@ class _TeacherHomeScreenState extends TeacherHomeController {
                 color: Colors.grey,
               ),
               child: Text(
-                'TEACHER',
+                'PhysIX - TEACHER',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
