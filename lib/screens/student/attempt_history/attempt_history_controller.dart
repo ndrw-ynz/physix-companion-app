@@ -37,6 +37,7 @@ abstract class AttemptHistoryController extends State<AttemptHistoryScreen> {
     super.initState();
     selectedLesson = lessons[0];
     selectedDifficulty = difficulties[0];
+    _fetchAttemptHistory();
   }
 
   Future<void> _fetchAttemptHistory() async {
