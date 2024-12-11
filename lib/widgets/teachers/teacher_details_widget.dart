@@ -32,7 +32,7 @@ class _TeacherDetailsWidgetState extends State<TeacherDetailsWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.all(20.0),
+        margin: const EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
         height: 180,
         decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 2.0),
@@ -106,15 +106,7 @@ class _TeacherDetailsWidgetState extends State<TeacherDetailsWidget> {
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                         ),
-                      ),
-                      const SizedBox(width: 10), // Space between buttons
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.delete),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                      ),
+                      )
                     ],
                   ),
                 ],
