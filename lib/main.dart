@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:physix_companion_app/utils.dart';
-import 'package:physix_companion_app/widgets/change_password/change_password_screen_widget.dart';
 import 'commons.dart';
 import 'firebase_options.dart';
 
@@ -22,6 +21,7 @@ import 'screens/home_screen.dart';
 import 'screens/teacher/student_progress/student_attempts_details_screen.dart';
 import 'screens/teacher/student_progress/teacher_student_progress_screen.dart';
 import 'screens/teacher/students/teacher_student_view_screen.dart';
+import 'widgets/change_password/change_password_screen_widget.dart';
 import 'widgets/sections/section_form_widget.dart';
 import 'widgets/students/student_form_widget.dart';
 import 'widgets/teachers/teacher_form_widget.dart';
@@ -102,14 +102,35 @@ final _router = GoRouter(
       GoRoute(
           path: "/",
           builder: (context, state) =>
-              const HomeScreen(title: "PhysIX Companion App")),
-      GoRoute(
-          path: "/admin_login",
-          builder: (context, state) => const AdminLoginScreen(),
+              const HomeScreen(title: "PhysIX Companion App"),
           routes: <RouteBase>[
             GoRoute(
-                path: "forgot_password",
-                builder: (context, state) => const AdminForgotPasswordScreen())
+                path: "admin_login",
+                builder: (context, state) => const AdminLoginScreen(),
+                routes: <RouteBase>[
+                  GoRoute(
+                      path: "forgot_password",
+                      builder: (context, state) =>
+                          const AdminForgotPasswordScreen())
+                ]),
+            GoRoute(
+                path: "teacher_login",
+                builder: (context, state) => const TeacherLoginScreen(),
+                routes: <RouteBase>[
+                  GoRoute(
+                      path: "forgot_password",
+                      builder: (context, state) =>
+                          const TeacherForgotPasswordScreen())
+                ]),
+            GoRoute(
+                path: "student_login",
+                builder: (context, state) => const StudentLoginScreen(),
+                routes: <RouteBase>[
+                  GoRoute(
+                      path: "forgot_password",
+                      builder: (context, state) =>
+                          const TeacherForgotPasswordScreen())
+                ]),
           ]),
       GoRoute(
           path: "/admin_home",
@@ -170,15 +191,6 @@ final _router = GoRouter(
                 builder: (context, state) => const ChangePasswordScreenWidget())
           ]),
       GoRoute(
-          path: "/teacher_login",
-          builder: (context, state) => const TeacherLoginScreen(),
-          routes: <RouteBase>[
-            GoRoute(
-                path: "forgot_password",
-                builder: (context, state) =>
-                    const TeacherForgotPasswordScreen())
-          ]),
-      GoRoute(
           path: "/teacher_home",
           builder: (context, state) => const TeacherHomeScreen(),
           routes: <RouteBase>[
@@ -231,15 +243,6 @@ final _router = GoRouter(
             GoRoute(
                 path: "change_password",
                 builder: (context, state) => const ChangePasswordScreenWidget())
-          ]),
-      GoRoute(
-          path: "/student_login",
-          builder: (context, state) => const StudentLoginScreen(),
-          routes: <RouteBase>[
-            GoRoute(
-                path: "forgot_password",
-                builder: (context, state) =>
-                    const TeacherForgotPasswordScreen())
           ]),
       GoRoute(
           path: "/student_home",
