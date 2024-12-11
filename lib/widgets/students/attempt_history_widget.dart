@@ -375,35 +375,42 @@ class _AttemptHistoryWidgetState extends State<AttemptHistoryWidget> {
               .format(widget.attemptInfo["dateAttempted"].toDate())),
         ],
       ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      Wrap(
+        direction: Axis.horizontal,
+        spacing: 10.0,
+        runSpacing: 10.0,
         children: [
-          Wrap(
-            direction: Axis.horizontal,
-            alignment: WrapAlignment.spaceBetween,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Difficulty: "),
-              Text(
-                widget.attemptInfo["difficulty"],
-                style: TextStyle(
-                    color:
-                        _getDifficultyColor(widget.attemptInfo["difficulty"])),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Difficulty: "),
+                  Text(
+                    widget.attemptInfo["difficulty"],
+                    style: TextStyle(
+                      color:
+                          _getDifficultyColor(widget.attemptInfo["difficulty"]),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          Wrap(
-            direction: Axis.horizontal,
-            alignment: WrapAlignment.spaceBetween,
-            children: [
-              const Text("Status: "),
-              Text(
-                widget.attemptInfo["isAccomplished"]
-                    ? "Accomplished"
-                    : "Not Accomplished",
-                style: TextStyle(
-                    color: widget.attemptInfo["isAccomplished"]
-                        ? Colors.green
-                        : Colors.red),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Status: "),
+                  Text(
+                    widget.attemptInfo["isAccomplished"]
+                        ? "Accomplished"
+                        : "Not Accomplished",
+                    style: TextStyle(
+                      color: widget.attemptInfo["isAccomplished"]
+                          ? Colors.green
+                          : Colors.red,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
