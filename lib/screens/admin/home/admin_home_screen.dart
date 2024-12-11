@@ -35,7 +35,7 @@ class _AdminHomeScreenState extends AdminHomeController {
                   color: Colors.grey,
                 ),
                 child: Text(
-                  'ADMIN',
+                  'PhysIX - ADMIN',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -78,20 +78,20 @@ class _AdminHomeScreenState extends AdminHomeController {
                   "$sectionCount Section(s)", "/admin_home/sections"),
               const SizedBox(height: 25.0),
               _buildTile(context, Icons.person, "Students",
-                  "$studentCount Student(s)", "/admin_home"),
+                  "$studentCount Student(s)", null),
             ],
           ),
         )));
   }
 
   Widget _buildTile(BuildContext context, IconData icon, String label,
-      String description, String location) {
+      String description, String? location) {
     return ListTile(
       leading: Icon(icon, size: 40),
       title: Text(label,
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       subtitle: Text(description),
-      onTap: () => context.push(location),
+      onTap: () => location == null ? null : context.push(location),
       contentPadding:
           const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
       tileColor: Colors.white,
