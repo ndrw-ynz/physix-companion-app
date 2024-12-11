@@ -378,8 +378,9 @@ class _AttemptHistoryWidgetState extends State<AttemptHistoryWidget> {
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Wrap(
+            direction: Axis.horizontal,
+            alignment: WrapAlignment.spaceBetween,
             children: [
               const Text("Difficulty: "),
               Text(
@@ -390,8 +391,9 @@ class _AttemptHistoryWidgetState extends State<AttemptHistoryWidget> {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Wrap(
+            direction: Axis.horizontal,
+            alignment: WrapAlignment.spaceBetween,
             children: [
               const Text("Status: "),
               Text(
