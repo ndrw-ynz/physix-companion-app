@@ -13,6 +13,7 @@ import 'screens/admin/sections/admin_sections_view_screen.dart';
 import 'screens/admin/teachers/admin_teacher_view_screen.dart';
 import 'screens/student/attempt_history/attempt_history_screen.dart';
 import 'screens/student/home/student_home_screen.dart';
+import 'screens/student/login/student_forgot_password_screen.dart';
 import 'screens/student/login/student_login_screen.dart';
 import 'screens/teacher/home/teacher_home_screen.dart';
 import 'screens/teacher/login/teacher_forgot_password_screen.dart';
@@ -129,7 +130,7 @@ final _router = GoRouter(
                   GoRoute(
                       path: "forgot_password",
                       builder: (context, state) =>
-                          const TeacherForgotPasswordScreen())
+                          const StudentForgotPasswordScreen())
                 ]),
           ]),
       GoRoute(
