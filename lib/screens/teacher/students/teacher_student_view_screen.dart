@@ -79,9 +79,9 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                         fillColor: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 12.0),
+                    const SizedBox(height: 8.0),
                     Container(
-                      padding: const EdgeInsets.all(5.0),
+                      padding: const EdgeInsets.fromLTRB(5.0, 2.5, 5.0, 2.5),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(5.0),
@@ -100,6 +100,7 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                         onChanged: (String? newValue) {
                           setState(() {
                             selectedSection = newValue!;
+                            _fetchAllStudents();
                           });
                         },
                         hint: const Text(
@@ -111,11 +112,10 @@ class _TeacherStudentViewScreenState extends TeacherStudentViewController {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 12.0),
                   ],
                 ),
               ),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 10.0),
               Expanded(
                 child: ListView.builder(
                   itemCount: filteredList.length,
