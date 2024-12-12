@@ -42,189 +42,192 @@ class _TeacherFormWidgetState extends TeacherFormController {
               bottom:
                   BorderSide(color: Colors.black, width: 2.0), // Black outline
             )),
-        body: Center(
-            child: Padding(
+        body: Padding(
           padding: const EdgeInsets.only(
               top: 20.0, left: 42.0, right: 42.0, bottom: 20.0),
-          child: Column(children: <Widget>[
-            Text("${_getFormTypeDesc()} Teacher",
-                style: const TextStyle(fontSize: 28.0)),
-            Container(
-                margin: const EdgeInsets.all(15.0),
-                padding: const EdgeInsets.all(20.0),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 2.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.grey[200]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // First name field
-                    const Text(
-                      "First Name",
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: _firstNameController,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(),
+          child: SingleChildScrollView(
+            child: Column(children: <Widget>[
+              Text("${_getFormTypeDesc()} Teacher",
+                  style: const TextStyle(fontSize: 28.0)),
+              Container(
+                  margin: const EdgeInsets.all(15.0),
+                  padding: const EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.grey[200]),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      // First name field
+                      const Text(
+                        "First Name",
+                        style: TextStyle(fontSize: 16.0),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    // Last name field
-                    const Text(
-                      "Last Name",
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: _lastNameController,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: _firstNameController,
+                        style: const TextStyle(color: Colors.black),
+                        decoration: const InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
+                      const SizedBox(height: 20),
+                      // Last name field
+                      const Text(
+                        "Last Name",
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: _lastNameController,
+                        style: const TextStyle(color: Colors.black),
+                        decoration: const InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
 
-                    // Email field
-                    if (widget.formMode == FormMode.add)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      // Email field
+                      if (widget.formMode == FormMode.add)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Email",
+                              style: TextStyle(fontSize: 16.0),
+                            ),
+                            const SizedBox(height: 10),
+                            TextFormField(
+                              controller: _emailController,
+                              style: const TextStyle(color: Colors.black),
+                              decoration: const InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+
+                            // Date registered
+                            const Text(
+                              "Date Registered",
+                              style: TextStyle(fontSize: 16.0),
+                            ),
+                            TextFormField(
+                              controller: _dateController,
+                              style: const TextStyle(color: Colors.black),
+                              decoration: const InputDecoration(
+                                filled: true,
+                                fillColor: Colors.grey,
+                                border: OutlineInputBorder(),
+                              ),
+                              readOnly: true,
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+                        ),
+
+                      // Status selection
+                      const Text(
+                        "Status",
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
                         children: [
-                          const Text(
-                            "Email",
-                            style: TextStyle(fontSize: 16.0),
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _emailController,
-                            style: const TextStyle(color: Colors.black),
-                            decoration: const InputDecoration(
-                              filled: true,
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  teacherStatus = true;
+                                });
+                              },
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: teacherStatus == true
+                                      ? Colors.green
+                                      : Colors.white,
+                                  border: Border.all(color: Colors.black),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Active',
+                                    style: TextStyle(
+                                      color: teacherStatus == true
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                          const SizedBox(height: 10),
-
-                          // Date registered
-                          const Text(
-                            "Date Registered",
-                            style: TextStyle(fontSize: 16.0),
-                          ),
-                          TextFormField(
-                            controller: _dateController,
-                            style: const TextStyle(color: Colors.black),
-                            decoration: const InputDecoration(
-                              filled: true,
-                              fillColor: Colors.grey,
-                              border: OutlineInputBorder(),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  teacherStatus = false;
+                                });
+                              },
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: teacherStatus == false
+                                      ? Colors.red
+                                      : Colors.white,
+                                  border: Border.all(color: Colors.black),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Inactive',
+                                    style: TextStyle(
+                                      color: teacherStatus == false
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                            readOnly: true,
                           ),
-                          const SizedBox(height: 20),
                         ],
                       ),
+                      const SizedBox(height: 20),
 
-                    // Status selection
-                    const Text(
-                      "Status",
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                teacherStatus = true;
-                              });
+                      const Text(
+                        "Username and Password are auto-generated*",
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 15),
+                      Container(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              _showConfirmationDialog(context,
+                                  "${_firstNameController.text} ${_lastNameController.text}");
                             },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              decoration: BoxDecoration(
-                                color: teacherStatus == true
-                                    ? Colors.green
-                                    : Colors.white,
-                                border: Border.all(color: Colors.black),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Active',
-                                  style: TextStyle(
-                                    color: teacherStatus == true
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                teacherStatus = false;
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              decoration: BoxDecoration(
-                                color: teacherStatus == false
-                                    ? Colors.red
-                                    : Colors.white,
-                                border: Border.all(color: Colors.black),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Inactive',
-                                  style: TextStyle(
-                                    color: teacherStatus == false
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-
-                    const Text(
-                      "Username and Password are auto-generated*",
-                      style: TextStyle(
-                          fontSize: 12.0,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 15),
-                    Container(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            _showConfirmationDialog(context,
-                                "${_firstNameController.text} ${_lastNameController.text}");
-                          },
-                          style: ButtonStyle(),
-                          child: Text("${_getFormTypeDesc()} Teacher")),
-                    )
-                  ],
-                ))
-          ]),
-        )));
+                            style: ButtonStyle(),
+                            child: Text("${_getFormTypeDesc()} Teacher")),
+                      )
+                    ],
+                  ))
+            ]),
+          ),
+        ));
   }
 }
 

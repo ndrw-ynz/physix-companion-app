@@ -156,7 +156,6 @@ class _StudentFormWidgetState extends StudentFormController {
                           hint: const Text('Select an option'),
                           icon: const Icon(Icons.arrow_drop_down),
                           isExpanded: true,
-                          dropdownColor: Colors.white54,
                           style: const TextStyle(color: Colors.black),
                           items: dropdownSectionItems,
                           onChanged: (String? newValue) {
