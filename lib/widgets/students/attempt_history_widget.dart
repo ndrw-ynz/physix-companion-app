@@ -158,9 +158,11 @@ class _AttemptHistoryWidgetState extends State<AttemptHistoryWidget> {
                   color: Colors.white),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  Wrap(
+                    direction: Axis.horizontal,
+                    alignment: WrapAlignment.start,
                     children: [
                       const Text(
                         "Acceleration: ",
@@ -179,8 +181,9 @@ class _AttemptHistoryWidgetState extends State<AttemptHistoryWidget> {
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  Wrap(
+                    direction: Axis.horizontal,
+                    alignment: WrapAlignment.start,
                     children: [
                       const Text(
                         "Number of Mistakes: ",
@@ -191,8 +194,9 @@ class _AttemptHistoryWidgetState extends State<AttemptHistoryWidget> {
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  Wrap(
+                    direction: Axis.horizontal,
+                    alignment: WrapAlignment.start,
                     children: [
                       const Text(
                         "Total Depth: ",
@@ -211,8 +215,9 @@ class _AttemptHistoryWidgetState extends State<AttemptHistoryWidget> {
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  Wrap(
+                    direction: Axis.horizontal,
+                    alignment: WrapAlignment.start,
                     children: [
                       const Text(
                         "Number of Mistakes: ",
@@ -223,8 +228,9 @@ class _AttemptHistoryWidgetState extends State<AttemptHistoryWidget> {
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  Wrap(
+                    direction: Axis.horizontal,
+                    alignment: WrapAlignment.start,
                     children: [
                       const Text(
                         "Total Duration: ",
@@ -369,33 +375,42 @@ class _AttemptHistoryWidgetState extends State<AttemptHistoryWidget> {
               .format(widget.attemptInfo["dateAttempted"].toDate())),
         ],
       ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      Wrap(
+        direction: Axis.horizontal,
+        spacing: 10.0,
+        runSpacing: 10.0,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Difficulty: "),
-              Text(
-                widget.attemptInfo["difficulty"],
-                style: TextStyle(
-                    color:
-                        _getDifficultyColor(widget.attemptInfo["difficulty"])),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Difficulty: "),
+                  Text(
+                    widget.attemptInfo["difficulty"],
+                    style: TextStyle(
+                      color:
+                          _getDifficultyColor(widget.attemptInfo["difficulty"]),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("Status: "),
-              Text(
-                widget.attemptInfo["isAccomplished"]
-                    ? "Accomplished"
-                    : "Not Accomplished",
-                style: TextStyle(
-                    color: widget.attemptInfo["isAccomplished"]
-                        ? Colors.green
-                        : Colors.red),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Status: "),
+                  Text(
+                    widget.attemptInfo["isAccomplished"]
+                        ? "Accomplished"
+                        : "Not Accomplished",
+                    style: TextStyle(
+                      color: widget.attemptInfo["isAccomplished"]
+                          ? Colors.green
+                          : Colors.red,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -419,9 +434,11 @@ class _AttemptHistoryWidgetState extends State<AttemptHistoryWidget> {
           color: Colors.grey[350]),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          Wrap(
+            direction: Axis.horizontal,
+            alignment: WrapAlignment.start,
             children: [
               Text(
                 "$subActivityName: ",
@@ -434,8 +451,9 @@ class _AttemptHistoryWidgetState extends State<AttemptHistoryWidget> {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          Wrap(
+            direction: Axis.horizontal,
+            alignment: WrapAlignment.start,
             children: [
               const Text(
                 "Number of Mistakes: ",
@@ -447,8 +465,9 @@ class _AttemptHistoryWidgetState extends State<AttemptHistoryWidget> {
             ],
           ),
           if (durationInSec != null)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+            Wrap(
+              direction: Axis.horizontal,
+              alignment: WrapAlignment.start,
               children: [
                 const Text(
                   "Duration: ",

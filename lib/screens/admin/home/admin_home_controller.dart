@@ -16,6 +16,7 @@ abstract class AdminHomeController extends State<AdminHomeScreen> {
       await FirebaseAuth.instance.signOut();
       print("User logged out successfully");
       context.go("/");
+      authNotifier.logoutUser();
     } catch (e) {
       print("Error logging out: $e");
     }
@@ -24,6 +25,7 @@ abstract class AdminHomeController extends State<AdminHomeScreen> {
   Future<void> fetchUserSectionCounts() async {
     await _fetchTeacherCount();
     await _fetchSectionCount();
+    await _fetchStudentCount();
   }
 
   Future<void> _fetchTeacherCount() async {
@@ -53,6 +55,21 @@ abstract class AdminHomeController extends State<AdminHomeScreen> {
       print("Number of sections: $sectionCount");
     } catch (e) {
       print("Error fetching section count: $e");
+    }
+  }
+
+  Future<void> _fetchStudentCount() async {
+    try {
+      QuerySnapshot sectionSnapshot =
+          await FirebaseFirestore.instance.collection('students').get();
+
+      setState(() {
+        studentCount = sectionSnapshot.docs.length;
+      });
+
+      print("Number of students: $studentCount");
+    } catch (e) {
+      print("Error fetching student count: $e");
     }
   }
 }

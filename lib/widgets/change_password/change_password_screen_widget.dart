@@ -16,8 +16,10 @@ class _ChangePasswordScreenWidgetState
 
   final _oldPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   bool _isOldPasswordObscured = true;
   bool _isNewPasswordObscured = true;
+  bool _isConfirmPasswordObscured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,8 @@ class _ChangePasswordScreenWidgetState
                     filled: true,
                     fillColor: Colors.white,
                     border: const OutlineInputBorder(),
+                    hintText: "Enter your current password",
+                    hintStyle: const TextStyle(color: Colors.grey),
                     prefixIcon: const Icon(
                       Icons.lock_outline,
                       color: Colors.black,
@@ -83,6 +87,8 @@ class _ChangePasswordScreenWidgetState
                     filled: true,
                     fillColor: Colors.white,
                     border: const OutlineInputBorder(),
+                    hintText: "Create a secure password",
+                    hintStyle: const TextStyle(color: Colors.grey),
                     prefixIcon: const Icon(
                       Icons.lock_outline,
                       color: Colors.black,
@@ -104,6 +110,50 @@ class _ChangePasswordScreenWidgetState
 
                   if (value.length < 8) {
                     return 'Password must be at least 8 characters';
+                  }
+
+                  return null;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+              ),
+              const SizedBox(height: 20.0),
+              const Text(
+                "Confirm Password",
+                style: TextStyle(fontSize: 18.0),
+              ),
+              const SizedBox(height: 5.0),
+              TextFormField(
+                controller: _confirmPasswordController,
+                obscureText: _isConfirmPasswordObscured,
+                style: const TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: const OutlineInputBorder(),
+                    hintText: "Confirm your password",
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    prefixIcon: const Icon(
+                      Icons.lock_outline,
+                      color: Colors.black,
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(_isConfirmPasswordObscured
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          _isConfirmPasswordObscured =
+                              !_isConfirmPasswordObscured;
+                        });
+                      },
+                    )),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Password is required';
+                  }
+
+                  if (value != _newPasswordController.text) {
+                    return 'Password must be the same as the new password.';
                   }
 
                   return null;
@@ -137,6 +187,7 @@ class _ChangePasswordScreenWidgetState
     if (isUpdated) {
       _oldPasswordController.clear();
       _newPasswordController.clear();
+      _confirmPasswordController.clear();
     }
     print("Is updated: $isUpdated");
   }

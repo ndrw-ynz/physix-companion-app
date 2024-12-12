@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:physix_companion_app/services/auth_service.dart';
 
 import '../../../utils.dart';
 
@@ -35,7 +36,7 @@ class _TeacherHomeScreenState extends TeacherHomeController {
                 color: Colors.grey,
               ),
               child: Text(
-                'TEACHER',
+                'PhysIX - TEACHER',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,

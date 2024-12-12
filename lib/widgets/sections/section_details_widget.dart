@@ -22,13 +22,13 @@ class SectionDetailsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.all(20.0),
-        height: 140,
+        margin: const EdgeInsets.all(10.0),
+        height: 150,
         decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 2.0),
             borderRadius: BorderRadius.circular(10.0)),
         child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Row(
@@ -62,15 +62,7 @@ class SectionDetailsWidget extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                         ),
-                      ),
-                      const SizedBox(width: 10), // Space between buttons
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.delete),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                      ),
+                      )
                     ],
                   ),
                 ],
@@ -85,21 +77,27 @@ class SectionDetailsWidget extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Row(children: <Widget>[
-                        const Text(
-                          "Teacher Assigned:",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 10),
-                        Text("$teacherAssigned"),
-                      ]),
+                      Wrap(
+                          direction: Axis.horizontal,
+                          alignment: WrapAlignment.start,
+                          children: <Widget>[
+                            const Text(
+                              "Teacher Assigned:",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(width: 10),
+                            Text("$teacherAssigned"),
+                          ]),
                       const SizedBox(width: 10),
-                      Row(children: <Widget>[
-                        const Text("Date Registered:",
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        const SizedBox(width: 10),
-                        Text(formatTimestamp(dateRegistered)),
-                      ])
+                      Wrap(
+                          direction: Axis.horizontal,
+                          alignment: WrapAlignment.start,
+                          children: <Widget>[
+                            const Text("Date Registered:",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            const SizedBox(width: 10),
+                            Text(formatTimestamp(dateRegistered)),
+                          ])
                     ],
                   ))
             ]));

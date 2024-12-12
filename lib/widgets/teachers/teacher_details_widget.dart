@@ -32,7 +32,7 @@ class _TeacherDetailsWidgetState extends State<TeacherDetailsWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.all(20.0),
+        margin: const EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
         height: 180,
         decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 2.0),
@@ -106,15 +106,7 @@ class _TeacherDetailsWidgetState extends State<TeacherDetailsWidget> {
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                         ),
-                      ),
-                      const SizedBox(width: 10), // Space between buttons
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.delete),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                      ),
+                      )
                     ],
                   ),
                 ],
@@ -127,33 +119,43 @@ class _TeacherDetailsWidgetState extends State<TeacherDetailsWidget> {
                       borderRadius: BorderRadius.circular(10.0),
                       color: Colors.grey[200]),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Row(children: <Widget>[
-                        const Text(
-                          "Email:",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 10),
-                        Text("${widget.email}"),
-                      ]),
+                      Wrap(
+                          direction: Axis.horizontal,
+                          alignment: WrapAlignment.start,
+                          children: <Widget>[
+                            const Text(
+                              "Email:",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(widget.email),
+                          ]),
                       const SizedBox(width: 10),
-                      Row(children: <Widget>[
-                        const Text(
-                          "Username:",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 10),
-                        Text("${widget.username}"),
-                      ]),
+                      Wrap(
+                          direction: Axis.horizontal,
+                          alignment: WrapAlignment.start,
+                          children: <Widget>[
+                            const Text(
+                              "Username:",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(widget.username),
+                          ]),
                       const SizedBox(width: 10),
-                      Row(children: <Widget>[
-                        const Text("Date Registered:",
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                        const SizedBox(width: 10),
-                        Text(formatTimestamp(widget.dateRegistered)),
-                        //Text(yearRegistered.toDate().year.toString()),
-                      ])
+                      Wrap(
+                          direction: Axis.horizontal,
+                          alignment: WrapAlignment.start,
+                          children: <Widget>[
+                            const Text("Date Registered:",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            const SizedBox(width: 10),
+                            Text(formatTimestamp(widget.dateRegistered)),
+                            //Text(yearRegistered.toDate().year.toString()),
+                          ])
                     ],
                   ))
             ]));

@@ -69,6 +69,7 @@ class _AttemptHistoryScreenState extends AttemptHistoryController {
                             onChanged: (String? newValue) {
                               setState(() {
                                 selectedLesson = newValue!;
+                                _fetchAttemptHistory();
                               });
                             },
                             hint: const Text(
@@ -102,6 +103,7 @@ class _AttemptHistoryScreenState extends AttemptHistoryController {
                             onChanged: (String? newValue) {
                               setState(() {
                                 selectedDifficulty = newValue!;
+                                _fetchAttemptHistory();
                               });
                             },
                             hint: const Text(

@@ -30,7 +30,7 @@ class _TeacherLoginScreenState extends TeacherLoginController {
             const Text('TEACHER',
                 style: TextStyle(color: Colors.white, fontSize: 36.0)),
             Container(
-              padding: const EdgeInsets.all(50.0),
+              padding: const EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 0.0),
               constraints: const BoxConstraints(maxWidth: 600, maxHeight: 400),
               width: double.infinity,
               height: double.infinity,
@@ -94,7 +94,7 @@ class _TeacherLoginScreenState extends TeacherLoginController {
                     child: const Text("Login",
                         style: TextStyle(color: Colors.white)),
                   ),
-                  const SizedBox(height: 40.0),
+                  const SizedBox(height: 30.0),
                   TextButton(
                       onPressed: () =>
                           context.push("/teacher_login/forgot_password"),

@@ -14,7 +14,8 @@ class TeacherStudentProgressScreen extends StatefulWidget {
       _TeacherStudentProgressScreenState();
 }
 
-class _TeacherStudentProgressScreenState extends TeacherStudentProgressController {
+class _TeacherStudentProgressScreenState
+    extends TeacherStudentProgressController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +30,7 @@ class _TeacherStudentProgressScreenState extends TeacherStudentProgressControlle
       body: Center(
         child: Padding(
           padding: const EdgeInsets.only(
-              top: 20.0, left: 42.0, right: 42.0, bottom: 20.0),
+              top: 20.0, left: 32.0, right: 32.0, bottom: 20.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,8 +60,8 @@ class _TeacherStudentProgressScreenState extends TeacherStudentProgressControlle
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(4.0),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 8.0),
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 8.0),
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.search),
                           onPressed: () {
@@ -81,96 +82,101 @@ class _TeacherStudentProgressScreenState extends TeacherStudentProgressControlle
 
                     // Row for Section, Lesson, and Difficulty Dropdowns
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // Section Dropdown
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: DropdownButton<String>(
-                              value: selectedSection,
-                              icon: const Icon(Icons.arrow_downward),
-                              elevation: 16,
-                              items: sections.map<DropdownMenuItem<String>>((String section) {
-                                return DropdownMenuItem<String>(
-                                  value: section,
-                                  child: Text(section),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedSection = newValue!;
-                                  _filterStudentSearch();
-                                });
-                              },
-                              hint: const Text(
-                                'Section',
-                                style: TextStyle(color: Colors.black),
-                              ),
+                        Container(
+                          padding:
+                              const EdgeInsets.fromLTRB(5.0, 2.5, 5.0, 2.5),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: DropdownButton<String>(
+                            value: selectedSection,
+                            icon: const Icon(Icons.arrow_downward),
+                            elevation: 16,
+                            items: sections.map<DropdownMenuItem<String>>(
+                                (String section) {
+                              return DropdownMenuItem<String>(
+                                value: section,
+                                child: Text(section),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedSection = newValue!;
+                                _filterStudentSearch();
+                              });
+                            },
+                            hint: const Text(
+                              'Section',
+                              style: TextStyle(color: Colors.black),
                             ),
                           ),
                         ),
                         const SizedBox(width: 8.0),
 
                         // Lesson Dropdown
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: DropdownButton<int>(
-                              value: selectedLessonNumber, // Default value set in initState
-                              icon: const Icon(Icons.arrow_downward),
-                              elevation: 16,
-                              items: List.generate(9, (index) => index + 1).map<DropdownMenuItem<int>>((int lesson) {
-                                return DropdownMenuItem<int>(
-                                  value: lesson,
-                                  child: Text('Lesson $lesson'),
-                                );
-                              }).toList(),
-                              onChanged: (int? newValue) {
-                                setState(() {
-                                  selectedLessonNumber = newValue;
-                                  _fetchLessonAttempts();
-                                });
-                              },
-                              hint: const Text('Lesson'),
-                            ),
+                        Container(
+                          padding:
+                              const EdgeInsets.fromLTRB(5.0, 2.5, 5.0, 2.5),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: DropdownButton<int>(
+                            value:
+                                selectedLessonNumber, // Default value set in initState
+                            icon: const Icon(Icons.arrow_downward),
+                            elevation: 16,
+                            items: List.generate(9, (index) => index + 1)
+                                .map<DropdownMenuItem<int>>((int lesson) {
+                              return DropdownMenuItem<int>(
+                                value: lesson,
+                                child: Text('Lesson $lesson'),
+                              );
+                            }).toList(),
+                            onChanged: (int? newValue) {
+                              setState(() {
+                                selectedLessonNumber = newValue;
+                                _fetchLessonAttempts();
+                              });
+                            },
+                            hint: const Text('Lesson'),
                           ),
                         ),
                         const SizedBox(width: 8.0),
 
                         // Difficulty Dropdown
-                        Expanded(
-                          child: Container(
-                            padding: const EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: DropdownButton<String>(
-                              value: selectedDifficulty, // Default value set in initState
-                              icon: const Icon(Icons.arrow_downward),
-                              elevation: 16,
-                              items: ['Easy', 'Medium', 'Hard'].map<DropdownMenuItem<String>>((String difficulty) {
-                                return DropdownMenuItem<String>(
-                                  value: difficulty,
-                                  child: Text(difficulty),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  selectedDifficulty = newValue;
-                                  _filterStudentSearch();
-                                });
-                              },
-                              hint: const Text('Difficulty'),
-                            ),
+                        Container(
+                          padding:
+                              const EdgeInsets.fromLTRB(5.0, 2.5, 5.0, 2.5),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: DropdownButton<String>(
+                            value:
+                                selectedDifficulty, // Default value set in initState
+                            icon: const Icon(Icons.arrow_downward),
+                            elevation: 16,
+                            items: ['Easy', 'Medium', 'Hard']
+                                .map<DropdownMenuItem<String>>(
+                                    (String difficulty) {
+                              return DropdownMenuItem<String>(
+                                value: difficulty,
+                                child: Text(difficulty),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedDifficulty = newValue;
+                                _filterStudentSearch();
+                              });
+                            },
+                            hint: const Text('Difficulty'),
                           ),
                         ),
                       ],
@@ -186,27 +192,31 @@ class _TeacherStudentProgressScreenState extends TeacherStudentProgressControlle
                     final student_progress = filteredList[index];
 
                     // Initialize default values
-                    int lessonNumber = selectedLessonNumber ?? 0;  // Default to selected lesson number
-                    String difficulty = selectedDifficulty ?? "Easy";  // Default to selected difficulty
+                    int lessonNumber = selectedLessonNumber ??
+                        0; // Default to selected lesson number
+                    String difficulty = selectedDifficulty ??
+                        "Easy"; // Default to selected difficulty
                     bool isAccomplished = false;
 
                     // Filter lesson attempts based on selected lesson number and difficulty
                     for (var attempt in lessonAttempts) {
                       // Debugging: Print the document ID and the student IDs being compared
-                      print('Comparing Student ID: ${student_progress['id']} with Attempt Student ID: ${attempt['studentId']}');
+                      print(
+                          'Comparing Student ID: ${student_progress['id']} with Attempt Student ID: ${attempt['studentId']}');
                       print('Attempt Document ID: ${attempt['id']}');
 
                       if (attempt['studentId'] == student_progress['id'] &&
                           attempt['difficulty'] == difficulty) {
-
                         // Debugging: Print out the attempt data
-                        print('Attempt Data for Student ${student_progress['firstName']} ${student_progress['lastName']}: $attempt');
+                        print(
+                            'Attempt Data for Student ${student_progress['firstName']} ${student_progress['lastName']}: $attempt');
 
                         // Check if any of the filtered attempts are accomplished
                         if (attempt['isAccomplished'] == true) {
-                          print('Found Accomplished Attempt: ${attempt['isAccomplished']}');
+                          print(
+                              'Found Accomplished Attempt: ${attempt['isAccomplished']}');
                           isAccomplished = true;
-                          break;  // If any is accomplished, no need to check further
+                          break; // If any is accomplished, no need to check further
                         }
                       }
                     }
@@ -217,22 +227,27 @@ class _TeacherStudentProgressScreenState extends TeacherStudentProgressControlle
                         context.go(
                           '/teacher_home/student_progress/attempts',
                           extra: {
-                            'studentId': student_progress['id'],  // Pass student ID
-                            'firstName': student_progress['firstName'],  // Pass student's first name
-                            'lastName': student_progress['lastName'],  // Pass student's last name
-                            'lessonNumber': lessonNumber,  // Pass the lesson number
-                            'difficulty': difficulty,  // Pass the difficulty level
+                            'studentId':
+                                student_progress['id'], // Pass student ID
+                            'firstName': student_progress[
+                                'firstName'], // Pass student's first name
+                            'lastName': student_progress[
+                                'lastName'], // Pass student's last name
+                            'lessonNumber':
+                                lessonNumber, // Pass the lesson number
+                            'difficulty':
+                                difficulty, // Pass the difficulty level
                           },
                         );
                       },
-
                       child: BasicStudentProgressDetailsWidget(
                         itemNumber: index + 1,
                         lastName: student_progress["lastName"] ?? "None",
                         firstName: student_progress["firstName"] ?? "None",
                         difficulty: difficulty,
                         lessonNumber: lessonNumber,
-                        isAccomplished: isAccomplished,  // Show accomplished status
+                        isAccomplished:
+                            isAccomplished, // Show accomplished status
                       ),
                     );
                   },

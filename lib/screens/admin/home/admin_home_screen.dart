@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:physix_companion_app/services/auth_service.dart';
 
 part "admin_home_controller.dart";
 
@@ -34,7 +35,7 @@ class _AdminHomeScreenState extends AdminHomeController {
                   color: Colors.grey,
                 ),
                 child: Text(
-                  'ADMIN',
+                  'PhysIX - ADMIN',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -54,9 +55,7 @@ class _AdminHomeScreenState extends AdminHomeController {
               ListTile(
                 leading: const Icon(Icons.lock_reset),
                 title: const Text('Change Password'),
-                onTap: () {
-                  // Handle navigation or any action
-                },
+                onTap: () => context.push("/admin_home/change_password"),
               ),
               ListTile(
                 leading: const Icon(Icons.exit_to_app_outlined),
@@ -79,20 +78,20 @@ class _AdminHomeScreenState extends AdminHomeController {
                   "$sectionCount Section(s)", "/admin_home/sections"),
               const SizedBox(height: 25.0),
               _buildTile(context, Icons.person, "Students",
-                  "$studentCount Student(s)", "/admin_home"),
+                  "$studentCount Student(s)", null),
             ],
           ),
         )));
   }
 
   Widget _buildTile(BuildContext context, IconData icon, String label,
-      String description, String location) {
+      String description, String? location) {
     return ListTile(
       leading: Icon(icon, size: 40),
       title: Text(label,
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       subtitle: Text(description),
-      onTap: () => context.push(location),
+      onTap: () => location == null ? null : context.push(location),
       contentPadding:
           const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
       tileColor: Colors.white,

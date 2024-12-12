@@ -36,87 +36,87 @@ class _SectionFormWidgetState extends SectionFormController {
               bottom:
                   BorderSide(color: Colors.black, width: 2.0), // Black outline
             )),
-        body: Center(
-            child: Padding(
+        body: Padding(
           padding: const EdgeInsets.only(
               top: 20.0, left: 42.0, right: 42.0, bottom: 20.0),
-          child: Column(children: <Widget>[
-            Text("${_getModeTypeDesc()} Section",
-                style: TextStyle(fontSize: 28.0)),
-            Container(
-                margin: const EdgeInsets.all(15.0),
-                padding: const EdgeInsets.all(20.0),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 2.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Colors.grey[200]),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    const Text(
-                      "Stub Code",
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: _sectionController,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: const InputDecoration(
-                        filled: true,
-                        border: OutlineInputBorder(),
+          child: SingleChildScrollView(
+            child: Column(children: <Widget>[
+              Text("${_getModeTypeDesc()} Section",
+                  style: TextStyle(fontSize: 28.0)),
+              Container(
+                  margin: const EdgeInsets.all(15.0),
+                  padding: const EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.grey[200]),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const Text(
+                        "Stub Code",
+                        style: TextStyle(fontSize: 16.0),
                       ),
-                    ),
-                    const SizedBox(height: 15),
-                    const Text(
-                      "Assigned Teacher",
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    const SizedBox(height: 10),
-                    DropdownButton<String>(
-                      value: selectedTeacherUid,
-                      hint: const Text('Select an option'),
-                      icon: const Icon(Icons.arrow_drop_down),
-                      isExpanded: true,
-                      dropdownColor: Colors.white54,
-                      style: const TextStyle(color: Colors.black),
-                      items: dropdownItems,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedTeacherUid = newValue!;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 15),
-                    const Text(
-                      "Date Registered",
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    TextFormField(
-                      controller: _dateController,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey,
-                        border: OutlineInputBorder(),
+                      const SizedBox(height: 10),
+                      TextFormField(
+                        controller: _sectionController,
+                        style: const TextStyle(color: Colors.black),
+                        decoration: const InputDecoration(
+                          filled: true,
+                          border: OutlineInputBorder(),
+                        ),
                       ),
-                      readOnly: true,
-                    ),
-                    const SizedBox(height: 15),
-                    Container(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            _showConfirmationDialog(
-                                context, _sectionController.text);
-                          },
-                          style: ButtonStyle(),
-                          child: Text("${_getModeTypeDesc()} Section")),
-                    )
-                  ],
-                ))
-          ]),
-        )));
+                      const SizedBox(height: 15),
+                      const Text(
+                        "Assigned Teacher",
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      const SizedBox(height: 10),
+                      DropdownButton<String>(
+                        value: selectedTeacherUid,
+                        hint: const Text('Select an option'),
+                        icon: const Icon(Icons.arrow_drop_down),
+                        isExpanded: true,
+                        style: const TextStyle(color: Colors.black),
+                        items: dropdownItems,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedTeacherUid = newValue!;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      const Text(
+                        "Date Registered",
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      TextFormField(
+                        controller: _dateController,
+                        style: const TextStyle(color: Colors.black),
+                        decoration: const InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey,
+                          border: OutlineInputBorder(),
+                        ),
+                        readOnly: true,
+                      ),
+                      const SizedBox(height: 15),
+                      Container(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              _showConfirmationDialog(
+                                  context, _sectionController.text);
+                            },
+                            style: ButtonStyle(),
+                            child: Text("${_getModeTypeDesc()} Section")),
+                      )
+                    ],
+                  ))
+            ]),
+          ),
+        ));
   }
 }
 
